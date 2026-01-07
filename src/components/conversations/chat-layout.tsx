@@ -137,13 +137,15 @@ export function ChatLayout({
         }}
         className={cn(isCollapsed && 'min-w-[50px] transition-all duration-300 ease-in-out')}
       >
-        <div className={cn('flex h-auto items-center justify-center', isCollapsed ? 'h-[56px]' : 'p-2')}>
+        <div className={cn('flex h-auto items-center', isCollapsed ? 'h-[56px] justify-center' : 'p-2')}>
           <Tabs defaultValue={sourceFilter} onValueChange={(value) => setSourceFilter(value as LeadSource | 'All')} className="w-full">
-            <TabsList className="grid w-full h-auto grid-cols-5">
-               {leadSources.map(source => (
-                 <TabsTrigger key={source} value={source}>{source}</TabsTrigger>
-               ))}
-            </TabsList>
+            <div className={cn("overflow-x-auto", isCollapsed && "hidden")}>
+                <TabsList>
+                {leadSources.map(source => (
+                    <TabsTrigger key={source} value={source}>{source}</TabsTrigger>
+                ))}
+                </TabsList>
+            </div>
           </Tabs>
         </div>
         <Separator />

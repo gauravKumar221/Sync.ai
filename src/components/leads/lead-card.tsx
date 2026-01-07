@@ -54,6 +54,19 @@ const getPriorityCardVariant = (priority: LeadPriority) => {
   }
 };
 
+const getPriorityBadgeVariant = (priority: LeadPriority) => {
+    switch (priority) {
+        case 'High':
+            return 'bg-blue-700/20 text-blue-300 border-blue-700/30';
+        case 'Medium':
+            return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+        case 'Low':
+            return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+        default:
+            return 'default';
+    }
+};
+
 
 const getStatusInitial = (status: LeadStatus) => {
   switch (status) {
@@ -150,7 +163,7 @@ export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: (
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col gap-3">
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={lead.avatarUrl} alt={lead.name} />
@@ -163,11 +176,18 @@ export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: (
                   </p>
                 </div>
               </div>
-              <Badge
-                className={cn('capitalize', getStatusBadgeVariant(lead.status))}
-              >
-                {lead.status}
-              </Badge>
+              <div className='flex gap-2'>
+                 <Badge
+                    className={cn('capitalize', getPriorityBadgeVariant(lead.priority))}
+                    >
+                    {lead.priority} Priority
+                </Badge>
+                <Badge
+                    className={cn('capitalize', getStatusBadgeVariant(lead.status))}
+                >
+                    {lead.status}
+                </Badge>
+              </div>
             </div>
             <div>
               <p className="text-sm font-medium">Last Message:</p>

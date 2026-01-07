@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar variant="inset">
         <SidebarNav />
       </Sidebar>
       <SidebarInset>

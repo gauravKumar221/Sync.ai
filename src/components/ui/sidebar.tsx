@@ -324,15 +324,15 @@ const SidebarInset = React.forwardRef<
       className={cn(
         "relative flex min-h-svh flex-1 flex-col bg-background",
         "transition-[margin-left,margin-right] duration-200 ease-linear",
-        "md:peer-data-[state=expanded]:peer-data-[side=left]:ml-[--sidebar-width]",
-        "md:peer-data-[state=expanded]:peer-data-[side=right]:mr-[--sidebar-width]",
-        "md:peer-data-[collapsible=icon]:peer-data-[state=collapsed]:peer-data-[side=left]:ml-[--sidebar-width-icon]",
-        "md:peer-data-[collapsible=icon]:peer-data-[state=collapsed]:peer-data-[side=right]:mr-[--sidebar-width-icon]",
+        "md:peer-data-[variant=sidebar]:peer-data-[state=expanded]:peer-data-[side=left]:ml-[--sidebar-width]",
+        "md:peer-data-[variant=sidebar]:peer-data-[state=expanded]:peer-data-[side=right]:mr-[--sidebar-width]",
+        "md:peer-data-[variant=sidebar]:peer-data-[collapsible=icon]:peer-data-[state=collapsed]:peer-data-[side=left]:ml-[--sidebar-width-icon]",
+        "md:peer-data-[variant=sidebar]:peer-data-[collapsible=icon]:peer-data-[state=collapsed]:peer-data-[side=right]:mr-[--sidebar-width-icon]",
         "peer-data-[variant=inset]:min-h-[calc(100svh-theme(spacing.4))] md:peer-data-[variant=inset]:m-2 md:peer-data-[variant=inset]:rounded-xl md:peer-data-[variant=inset]:shadow",
-        "md:peer-data-[state=expanded]:peer-data-[variant=inset]:peer-data-[side=left]:ml-[calc(var(--sidebar-width)_+_theme(spacing.2))]",
-        "md:peer-data-[state=expanded]:peer-data-[variant=inset]:peer-data-[side=right]:mr-[calc(var(--sidebar-width)_+_theme(spacing.2))]",
-        "md:peer-data-[collapsible=icon]:peer-data-[variant=inset]:peer-data-[state=collapsed]:peer-data-[side=left]:ml-[calc(var(--sidebar-width-icon)_+_theme(spacing.2))]",
-        "md:peer-data-[collapsible=icon]:peer-data-[variant=inset]:peer-data-[state=collapsed]:peer-data-[side=right]:mr-[calc(var(--sidebar-width-icon)_+_theme(spacing.2))]",
+        "md:peer-data-[variant=inset]:peer-data-[state=expanded]:peer-data-[side=left]:ml-[calc(var(--sidebar-width)_-_theme(spacing.4))]",
+        "md:peer-data-[variant=inset]:peer-data-[state=expanded]:peer-data-[side=right]:mr-[calc(var(--sidebar-width)_-_theme(spacing.4))]",
+        "md:peer-data-[variant=inset]:peer-data-[collapsible=icon]:peer-data-[state=collapsed]:peer-data-[side=left]:ml-[var(--sidebar-width-icon)]",
+        "md:peer-data-[variant=inset]:peer-data-[collapsible=icon]:peer-data-[state=collapsed]:peer-data-[side=right]:mr-[var(--sidebar-width-icon)]",
         className
       )}
       {...props}
@@ -522,18 +522,20 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = "SidebarMenuItem"
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-3 overflow-hidden rounded-xl px-3 py-2.5 text-left font-medium outline-none ring-sidebar-ring transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-glow/20 hover:to-cyan-glow/5 hover:text-cyan-glow focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-gradient-to-r data-[active=true]:from-cyan-glow/20 data-[active=true]:to-cyan-glow/5 data-[active=true]:text-cyan-glow data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 [&>span:last-child]:truncate",
+  "peer/menu-button flex w-full items-center gap-3 overflow-hidden rounded-md px-3 text-left outline-none ring-sidebar-ring transition-all duration-200 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-sidebar-accent data-[active=true]:text-sidebar-accent-foreground data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 [&>span:last-child]:truncate",
   {
     variants: {
       variant: {
-        default: "text-muted-foreground",
+        default:
+          "text-sidebar-foreground/70 hover:text-sidebar-accent-foreground",
         outline:
           "bg-background shadow-[0_0_0_1px_hsl(var(--sidebar-border))] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground hover:shadow-[0_0_0_1px_hsl(var(--sidebar-accent))]",
       },
       size: {
-        default: "h-8 text-sm group-data-[collapsible=icon]:!size-8 [&>svg]:size-4 [&>svg]:shrink-0",
-        sm: "h-7 text-xs group-data-[collapsible=icon]:!size-7 [&>svg]:size-3.5 [&>svg]:shrink-0",
-        lg: "h-12 text-base group-data-[collapsible=icon]:!size-12 [&>svg]:size-5 [&>svg]:shrink-0",
+        default:
+          "h-8 text-sm group-data-[collapsible=icon]:size-8 [&>svg]:size-4 [&>svg]:shrink-0",
+        sm: "h-7 text-xs group-data-[collapsible=icon]:size-7 [&>svg]:size-3.5 [&>svg]:shrink-0",
+        lg: "h-12 text-base group-data-[collapsible=icon]:size-12 [&>svg]:size-5 [&>svg]:shrink-0",
       },
     },
     defaultVariants: {

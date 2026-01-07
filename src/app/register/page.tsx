@@ -9,12 +9,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Logo from '@/components/logo';
 import { DotsBackground } from '@/components/ui/dots-background';
+import { useToast } from '@/hooks/use-toast';
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleCreateAccount = () => {
-    // In a real app, you'd handle form submission here
+    toast({
+        title: "Account Created Successfully",
+        description: "You can now log in with your new credentials.",
+    });
     router.push('/login');
   };
 

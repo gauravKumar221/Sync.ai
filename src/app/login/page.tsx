@@ -9,11 +9,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Logo from '@/components/logo';
 import { DotsBackground } from '@/components/ui/dots-background';
+import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleLogin = () => {
+    toast({
+      title: "Login Successful",
+      description: "Welcome back! Redirecting you to your dashboard.",
+    });
     // In a real app, you'd handle authentication here
     router.push('/dashboard/overview');
   };

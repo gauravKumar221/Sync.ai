@@ -272,7 +272,11 @@ export default function LeadsPage() {
       </div>
       <AlertDialog
         open={!!leadToDelete}
-        onOpenChange={(open) => !open && setLeadToDelete(null)}
+        onOpenChange={(open) => {
+          if (!open) {
+            setLeadToDelete(null);
+          }
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>

@@ -147,7 +147,12 @@ export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: (
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                   </DropdownMenuSub>
-                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(); }}>
+                  <DropdownMenuItem
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onDelete();
+                    }}
+                  >
                     <Trash2 className="mr-2 h-4 w-4 text-red-500" />
                     <span className="text-red-500">Delete</span>
                   </DropdownMenuItem>

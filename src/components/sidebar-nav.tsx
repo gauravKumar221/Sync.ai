@@ -77,6 +77,7 @@ export function SidebarNav() {
               <Link href={item.href} passHref legacyBehavior>
                 <SidebarMenuButton
                   as="a"
+                  size="lg"
                   isActive={isActive(item.href)}
                   tooltip={item.title}
                 >
@@ -94,6 +95,7 @@ export function SidebarNav() {
             <Link href={settingsNav.href} passHref legacyBehavior>
               <SidebarMenuButton
                 as="a"
+                size="lg"
                 isActive={isActive(settingsNav.href)}
                 tooltip={settingsNav.title}
               >

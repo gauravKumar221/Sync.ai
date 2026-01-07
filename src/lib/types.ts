@@ -7,7 +7,7 @@ export type NavItem = {
 };
 
 export type LeadStatus = 'New' | 'In Progress' | 'Converted' | 'Lost';
-export type LeadSource = 'WhatsApp' | 'Website' | 'Facebook' | 'Manual' | 'All';
+export type LeadSource = 'WhatsApp' | 'Website' | 'Facebook' | 'Manual';
 export type LeadPriority = 'Low' | 'Medium' | 'High';
 
 export type Agent = {

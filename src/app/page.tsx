@@ -98,20 +98,20 @@ export default function LandingPage() {
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.5 }}
             >
-              <div className="text-3xl font-bold">
+              <div className="text-3xl font-bold flex items-center gap-2">
+                <span>Never miss a lead from</span>
                 <RotatingText
-                  texts={['Lead Generation', 'WhatsApp', 'CRM', 'Facebook', 'Instagram']}
-                  mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+                  texts={['WhatsApp', 'Website', 'Facebook', 'Manual']}
+                  mainClassName="px-3 bg-primary text-primary-foreground overflow-hidden py-1 justify-center rounded-lg"
                   staggerFrom={"last"}
                   initial={{ y: "100%" }}
                   animate={{ y: 0 }}
                   exit={{ y: "-120%" }}
                   staggerDuration={0.025}
-                  splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                  splitLevelClassName="overflow-hidden pb-1"
                   transition={{ type: "spring", damping: 30, stiffness: 400 }}
                   rotationInterval={2000}
                 />
-                generate leads after this
               </div>
               <p className="mt-4 text-muted-foreground">
                 Our universal lead capture form can be embedded anywhere. Instantly sync leads from your website, social media, or any other source directly into your CRM.

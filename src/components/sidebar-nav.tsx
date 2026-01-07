@@ -87,7 +87,7 @@ export function SidebarNav() {
               <Link href={item.href}>
                 <SidebarMenuButton as="a" isActive={isActive(item.href)} size="lg" tooltip={item.title}>
                   <item.icon className="h-5 w-5" />
-                  <span className={cn('transition-opacity', isCollapsed ? 'opacity-0' : 'opacity-100')}>{item.title}</span>
+                  {!isCollapsed && <span>{item.title}</span>}
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
@@ -100,7 +100,7 @@ export function SidebarNav() {
             <Link href={settingsNav.href}>
               <SidebarMenuButton as="a" isActive={isActive(settingsNav.href)} size="lg" tooltip={settingsNav.title}>
                 <settingsNav.icon className="h-5 w-5" />
-                 <span className={cn('transition-opacity', isCollapsed ? 'opacity-0' : 'opacity-100')}>{settingsNav.title}</span>
+                {!isCollapsed && <span>{settingsNav.title}</span>}
               </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>

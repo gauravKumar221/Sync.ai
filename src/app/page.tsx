@@ -12,6 +12,7 @@ import Logo from '@/components/logo';
 import Plasma from '@/components/ui/plasma';
 import { cn } from '@/lib/utils';
 import RotatingText from '@/components/ui/RotatingText';
+import { motion } from 'motion/react';
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -90,7 +91,13 @@ export default function LandingPage() {
 
         <section id="capture" className="w-full py-12 md:py-20">
           <div className="container mx-auto grid max-w-4xl gap-12 px-4 md:grid-cols-2 md:px-6">
-            <div className="flex flex-col justify-center">
+            <motion.div
+              className="flex flex-col justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="text-3xl font-bold">
                 <RotatingText
                   texts={['Lead Generation', 'WhatsApp', 'CRM', 'Facebook', 'Instagram']}
@@ -109,7 +116,13 @@ export default function LandingPage() {
                 Our universal lead capture form can be embedded anywhere. Instantly sync leads from your website, social media, or any other source directly into your CRM.
               </p>
               <div className="mt-8 flex flex-col gap-4">
-                <div className="flex items-start gap-4">
+                <motion.div
+                  className="flex items-start gap-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                >
                   <div className="rounded-full bg-primary/10 p-2 text-primary">
                     <Zap className="h-5 w-5" />
                   </div>
@@ -117,8 +130,14 @@ export default function LandingPage() {
                     <h3 className="font-semibold">Instant Capture</h3>
                     <p className="text-sm text-muted-foreground">Leads are saved and displayed on your dashboard in real-time.</p>
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
+                </motion.div>
+                <motion.div
+                  className="flex items-start gap-4"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                >
                   <div className="rounded-full bg-primary/10 p-2 text-primary">
                     <MessageSquare className="h-5 w-5" />
                   </div>
@@ -126,17 +145,24 @@ export default function LandingPage() {
                     <h3 className="font-semibold">Automated First Touch</h3>
                     <p className="text-sm text-muted-foreground">Trigger intelligent auto-replies to engage leads from the first moment.</p>
                   </div>
-                </div>
+                </motion.div>
               </div>
-            </div>
-            <Card className="shadow-2xl shadow-primary/10">
-              <CardHeader>
-                <CardTitle>Get in Touch</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <LeadForm />
-              </CardContent>
-            </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Card className="shadow-2xl shadow-primary/10">
+                <CardHeader>
+                  <CardTitle>Get in Touch</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <LeadForm />
+                </CardContent>
+              </Card>
+            </motion.div>
           </div>
         </section>
       </main>

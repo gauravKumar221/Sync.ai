@@ -57,11 +57,11 @@ const getStatusInitial = (status: LeadStatus) => {
 const PriorityIcon = ({ priority }: { priority: LeadPriority }) => {
   switch (priority) {
     case 'Low':
-      return <Circle className="h-3 w-3 text-green-500" />;
+      return <Circle className="h-3 w-3 text-orange-500" />;
     case 'Medium':
       return <AlertTriangle className="h-3 w-3 text-yellow-500" />;
     case 'High':
-      return <Octagon className="h-3 w-3 text-red-500" fill="currentColor" />;
+      return <Octagon className="h-3 w-3 text-blue-700" fill="currentColor" />;
   }
 };
 

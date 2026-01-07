@@ -53,7 +53,7 @@ export default function LandingPage() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="relative w-full pt-12 md:pt-20">
+        <section className="relative w-full h-screen flex items-center justify-center">
           <div className="absolute inset-0 -z-10 h-full w-full">
             <Plasma
               color="hsl(var(--primary))"
@@ -64,7 +64,7 @@ export default function LandingPage() {
               mouseInteractive={true}
             />
           </div>
-          <div className="container mx-auto grid max-w-screen-xl items-center gap-6 px-4 pb-8 pt-14 md:px-6 md:py-20">
+          <div className="container mx-auto flex flex-col items-center gap-6 px-4 md:px-6">
             <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
               <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                 Convert Conversations <br className="hidden sm:inline" />

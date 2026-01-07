@@ -522,7 +522,7 @@ const SidebarMenuItem = React.forwardRef<
 SidebarMenuItem.displayName = "SidebarMenuItem"
 
 const sidebarMenuButtonVariants = cva(
-  "peer/menu-button flex w-full items-center gap-3 overflow-hidden rounded-xl px-3 py-2.5 text-left text-sm font-medium outline-none ring-sidebar-ring transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-glow/20 hover:to-cyan-glow/5 hover:text-cyan-glow focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-gradient-to-r data-[active=true]:from-cyan-glow/20 data-[active=true]:to-cyan-glow/5 data-[active=true]:text-cyan-glow data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 [&>span:last-child]:truncate",
+  "peer/menu-button flex w-full items-center gap-3 overflow-hidden rounded-xl px-3 py-2.5 text-left font-medium outline-none ring-sidebar-ring transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-glow/20 hover:to-cyan-glow/5 hover:text-cyan-glow focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabled:pointer-events-none disabled:opacity-50 group-has-[[data-sidebar=menu-action]]/menu-item:pr-8 aria-disabled:pointer-events-none aria-disabled:opacity-50 data-[active=true]:bg-gradient-to-r data-[active=true]:from-cyan-glow/20 data-[active=true]:to-cyan-glow/5 data-[active=true]:text-cyan-glow data-[state=open]:hover:bg-sidebar-accent data-[state=open]:hover:text-sidebar-accent-foreground group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 [&>span:last-child]:truncate",
   {
     variants: {
       variant: {
@@ -572,7 +572,7 @@ const SidebarMenuButton = React.forwardRef<
         data-sidebar="menu-button"
         data-size={size}
         data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+        className={cn(sidebarMenuButtonVariants({ variant, size, className }))}
         {...props}
       />
     )

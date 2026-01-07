@@ -64,7 +64,7 @@ function Calendar({
           }
           return (
             <div className="flex flex-col h-full w-full p-2">
-              <span className="self-start">{date.getDate()}</span>
+              <span className="self-start text-foreground">{date.getDate()}</span>
             </div>
           )
         }

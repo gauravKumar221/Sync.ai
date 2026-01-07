@@ -1,3 +1,5 @@
+'use client';
+
 import { SidebarProvider, Sidebar } from '@/components/ui/sidebar';
 import { SidebarNav } from '@/components/sidebar-nav';
 import { TopBar } from '@/components/top-bar';

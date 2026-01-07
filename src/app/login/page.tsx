@@ -5,17 +5,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Logo from '@/components/logo';
+import { DotsBackground } from '@/components/ui/dots-background';
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background">
-       <div className="absolute top-4 left-4">
+    <div className="relative flex min-h-screen flex-col items-center justify-center bg-background">
+      <DotsBackground />
+       <div className="absolute top-4 left-4 z-10">
          <Link href="/" className="flex items-center gap-2">
             <Logo className="h-6 w-6" />
             <span className="text-lg font-semibold">Sync.ai</span>
         </Link>
       </div>
-      <Card className="mx-auto max-w-sm">
+      <Card className="mx-auto max-w-sm z-10">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>Enter your email below to login to your account</CardDescription>

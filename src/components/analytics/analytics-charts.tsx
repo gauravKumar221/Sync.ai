@@ -1,6 +1,6 @@
 "use client"
 
-import { Bar, BarChart, Pie, PieChart, ResponsiveContainer } from "recharts"
+import { Bar, BarChart, Pie, PieChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
 import {
   Card,

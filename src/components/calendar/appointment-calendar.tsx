@@ -20,6 +20,7 @@ import { Input } from '@/components/ui/input';
 import type { Appointment, Agent } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { Clock } from 'lucide-react';
+import { DayContentProps } from 'react-day-picker';
 
 const quickScheduleSchema = z.object({
   clientName: z.string().min(2, 'Name is too short'),
@@ -61,49 +62,52 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
     .sort((a,b) => a.date.getTime() - b.date.getTime())
     .slice(0, 5);
 
+  const CustomDayContent = (dayProps: DayContentProps) => {
+    const { date } = dayProps;
+    const dateAppointments = appointments.filter(a => format(a.date, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd'));
+
+    return (
+      <div className="flex flex-col h-full w-full p-2">
+        <div className="self-start">{date.getDate()}</div>
+        {dateAppointments.length > 0 && (
+          <div className="mt-auto flex-grow flex flex-col justify-end">
+            {dateAppointments.slice(0, 2).map((appt, index) => (
+              <div key={index} className="flex items-center gap-1 text-xs">
+                <div className="h-1.5 w-1.5 rounded-full bg-red-500"></div>
+                <span className="truncate">{appt.purpose}</span>
+              </div>
+            ))}
+            {dateAppointments.length > 2 && (
+              <div className="text-xs text-muted-foreground mt-1">
+                + {dateAppointments.length - 2} more
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       <div className="lg:col-span-2">
-        <Card>
-            <CardContent className="p-0">
-                <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={setDate}
-                    className="w-full"
-                />
-            </CardContent>
+        <Card className="p-0">
+          <CardContent className="p-2 md:p-4">
+            <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                className="w-full"
+                components={{
+                  DayContent: CustomDayContent
+                }}
+            />
+          </CardContent>
         </Card>
       </div>
 
       <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Upcoming Appointments</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             {upcomingAppointments.length > 0 ? (
-                upcomingAppointments.map(appt => (
-                    <div key={appt.id} className="flex gap-4">
-                        <div className="flex-shrink-0 text-center">
-                            <p className="text-lg font-bold">{format(appt.date, "dd")}</p>
-                            <p className="text-xs text-muted-foreground">{format(appt.date, "MMM")}</p>
-                        </div>
-                        <div className="border-l-2 pl-4">
-                            <p className="font-semibold">{appt.purpose}</p>
-                            <p className="text-sm text-muted-foreground flex items-center gap-2">
-                                <Clock className="h-4 w-4" />
-                                {format(appt.date, "p")}
-                            </p>
-                        </div>
-                    </div>
-                ))
-            ) : (
-                <p className="text-sm text-muted-foreground text-center py-4">No upcoming appointments.</p>
-            )}
-          </CardContent>
-        </Card>
-
         <Card>
           <CardHeader>
             <CardTitle>Quick Schedule</CardTitle>
@@ -132,6 +136,33 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
                 <Button type="submit" className="w-full">Schedule</Button>
               </form>
             </Form>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader>
+            <CardTitle>Upcoming Appointments</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+             {upcomingAppointments.length > 0 ? (
+                upcomingAppointments.map(appt => (
+                    <div key={appt.id} className="flex gap-4">
+                        <div className="flex-shrink-0 text-center">
+                            <p className="text-lg font-bold">{format(appt.date, "dd")}</p>
+                            <p className="text-xs text-muted-foreground">{format(appt.date, "MMM")}</p>
+                        </div>
+                        <div className="border-l-2 border-primary pl-4">
+                            <p className="font-semibold">{appt.purpose}</p>
+                            <p className="text-sm text-muted-foreground flex items-center gap-2">
+                                <Clock className="h-4 w-4" />
+                                {format(appt.date, "p")}
+                            </p>
+                        </div>
+                    </div>
+                ))
+            ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">No upcoming appointments.</p>
+            )}
           </CardContent>
         </Card>
       </div>

@@ -1,3 +1,4 @@
+'use client';
 import { AppointmentCalendar } from "@/components/calendar/appointment-calendar";
 import { appointments, agents } from "@/lib/data";
 

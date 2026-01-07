@@ -1,14 +1,25 @@
 
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 export default function ProfilePage() {
+  const { toast } = useToast();
   const userProfileImage = PlaceHolderImages.find(p => p.id === 'user-profile');
+
+  const handleSaveChanges = () => {
+    toast({
+      title: "Profile Updated",
+      description: "Your changes have been saved successfully.",
+    });
+  };
 
   return (
     <div className="space-y-8">
@@ -62,7 +73,7 @@ export default function ProfilePage() {
               </div>
             </CardContent>
             <CardFooter>
-                 <Button>Save Changes</Button>
+                 <Button onClick={handleSaveChanges}>Save Changes</Button>
             </CardFooter>
           </Card>
         </div>

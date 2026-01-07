@@ -15,7 +15,7 @@ export default function LandingPage() {
             <Logo className="h-6 w-6" />
             <span className="font-bold">Sync.ai</span>
           </Link>
-          <div className="flex flex-1 items-center justify-end space-x-4">
+          <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
             <Button asChild variant="ghost">
               <Link href="/login">Login</Link>
             </Button>
@@ -28,7 +28,7 @@ export default function LandingPage() {
       <main className="flex-1">
         <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
           <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-5xl lg:text-6xl">
+            <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
               Convert Conversations <br className="hidden sm:inline" />
               into <span className="bg-gradient-to-r from-red-500 to-blue-500 bg-clip-text text-transparent">Customers</span>
             </h1>
@@ -36,13 +36,13 @@ export default function LandingPage() {
               Capture leads from any platform, engage them with AI-powered auto-replies, and manage your entire sales pipeline in one powerful dashboard.
             </p>
           </div>
-          <div className="mx-auto flex max-w-sm gap-4">
-            <Button asChild size="lg">
+          <div className="mx-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto max-w-sm">
+            <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/dashboard/overview">
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
               <Link href="#capture">Capture Leads</Link>
             </Button>
           </div>

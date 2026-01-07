@@ -50,7 +50,7 @@ const getPriorityCardVariant = (priority: LeadPriority) => {
     case 'Low':
       return 'bg-orange-500/10 border-orange-500/20';
     default:
-      return 'hover:bg-muted/50';
+      return 'bg-card';
   }
 };
 
@@ -105,7 +105,7 @@ export function LeadCard({ lead, onUpdate }: { lead: Lead, onUpdate: (lead: Lead
   };
   
   return (
-    <div className={cn("group flex cursor-pointer items-center gap-4 border-b p-3 pr-4 transition-colors last:border-b-0", getPriorityCardVariant(lead.priority))}>
+    <div className={cn("group flex cursor-pointer items-center gap-2 md:gap-4 border-b p-3 pr-4 transition-colors last:border-b-0", getPriorityCardVariant(lead.priority))}>
       <div className="flex items-center gap-3">
         <GripVertical className="h-4 w-4 text-muted-foreground/50 transition-opacity group-hover:opacity-100 md:opacity-0" />
         <Checkbox />
@@ -114,7 +114,7 @@ export function LeadCard({ lead, onUpdate }: { lead: Lead, onUpdate: (lead: Lead
       <TooltipProvider delayDuration={100}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <div className="flex w-full items-center gap-4">
+            <div className="flex w-full items-center gap-2 md:gap-4">
               <Badge
                 variant="outline"
                 className={cn(
@@ -126,12 +126,12 @@ export function LeadCard({ lead, onUpdate }: { lead: Lead, onUpdate: (lead: Lead
               </Badge>
               <div className="w-20 truncate font-medium flex items-center gap-2">
                 <PriorityIcon priority={lead.priority} />
-                {lead.name}
+                <span className="truncate">{lead.name}</span>
               </div>
-              <div className="flex-1 truncate text-muted-foreground">
+              <div className="flex-1 truncate text-muted-foreground hidden md:block">
                 {lead.lastMessage}
               </div>
-              <div className="w-24 text-right text-xs text-muted-foreground">
+              <div className="w-24 text-right text-xs text-muted-foreground hidden sm:block">
                 {lead.timestamp}
               </div>
             </div>
@@ -189,7 +189,7 @@ export function LeadCard({ lead, onUpdate }: { lead: Lead, onUpdate: (lead: Lead
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-7 w-7">
+          <Button variant="ghost" size="icon" className="h-7 w-7 ml-auto">
             <MoreVertical className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

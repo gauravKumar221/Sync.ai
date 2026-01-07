@@ -39,30 +39,11 @@ const statusOrder: LeadStatus[] = ['New', 'In Progress', 'Converted', 'Lost'];
 
 type DateFilterPreset = 'all' | 'today' | 'last7days' | 'lastyear' | 'custom';
 
-export default function LeadsPage() {
-  const [leads, setLeads] = useState<Lead[]>(allLeadsData);
-  const [groupBy, setGroupBy] = useState<'status' | 'assignedAgent'>('status');
-  const [statusFilter, setStatusFilter] = useState<LeadStatus | 'All'>('All');
-  const [dateFilter, setDateFilter] =
-    useState<DateFilterPreset>('all');
-  const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>(
-    undefined
-  );
-
-  const handleUpdateLead = (updatedLead: Lead) => {
-    setLeads(leads.map(lead => lead.id === updatedLead.id ? updatedLead : lead));
-  }
-
-  const handleClearFilters = () => {
-    setDateFilter('all');
-    setCustomDateRange(undefined);
-    setStatusFilter('All');
-    setGroupBy('status');
-  };
-
-  const filteredLeads = leads.filter((lead) => {
+const filterLeads = (leads: Lead[], status: LeadStatus | 'All', dateFilter: DateFilterPreset, customDateRange?: DateRange): Lead[] => {
+  return leads.filter((lead) => {
     // Status filter
-    if (statusFilter !== 'All' && lead.status !== statusFilter) {
+    const statusMatch = status === 'All' || lead.status === status;
+    if (!statusMatch) {
       return false;
     }
 
@@ -104,15 +85,46 @@ export default function LeadsPage() {
     
     return isInDateRange;
   });
+};
 
-  const groupedLeads: Record<string, Lead[]> = {};
-  filteredLeads.forEach(lead => {
+
+const groupLeads = (leads: Lead[], groupBy: 'status' | 'assignedAgent'): Record<string, Lead[]> => {
+  const grouped: Record<string, Lead[]> = {};
+  leads.forEach(lead => {
     const key = groupBy === 'status' ? lead.status : lead.assignedAgent.name;
-    if (!groupedLeads[key]) {
-      groupedLeads[key] = [];
+    if (!grouped[key]) {
+      grouped[key] = [];
     }
-    groupedLeads[key].push(lead);
+    grouped[key].push(lead);
   });
+  return grouped;
+};
+
+
+export default function LeadsPage() {
+  const [leads, setLeads] = useState<Lead[]>(allLeadsData);
+  const [groupBy, setGroupBy] = useState<'status' | 'assignedAgent'>('status');
+  const [statusFilter, setStatusFilter] = useState<LeadStatus | 'All'>('All');
+  const [dateFilter, setDateFilter] =
+    useState<DateFilterPreset>('all');
+  const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>(
+    undefined
+  );
+
+  const handleUpdateLead = (updatedLead: Lead) => {
+    setLeads(leads.map(lead => lead.id === updatedLead.id ? updatedLead : lead));
+  }
+
+  const handleClearFilters = () => {
+    setDateFilter('all');
+    setCustomDateRange(undefined);
+    setStatusFilter('All');
+    setGroupBy('status');
+  };
+
+  const filteredLeads = filterLeads(leads, statusFilter, dateFilter, customDateRange);
+  const groupedLeads = groupLeads(filteredLeads, groupBy);
+
 
   const sortedGroupKeys =
     groupBy === 'status'
@@ -128,8 +140,8 @@ export default function LeadsPage() {
             View and manage all your leads in one place.
           </p>
         </div>
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col md:flex-row md:flex-wrap items-start md:items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <label className="text-sm font-medium">Filter by Date:</label>
             <Select
               value={dateFilter}
@@ -140,7 +152,7 @@ export default function LeadsPage() {
                 }
               }}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter by Date" />
               </SelectTrigger>
               <SelectContent>
@@ -154,7 +166,7 @@ export default function LeadsPage() {
               <PopoverTrigger asChild>
                 <Button
                   variant={'outline'}
-                  className="w-[240px] justify-start text-left font-normal"
+                  className="w-full sm:w-[240px] justify-start text-left font-normal"
                   onClick={() => setDateFilter('custom')}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -182,7 +194,7 @@ export default function LeadsPage() {
               </PopoverContent>
             </Popover>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <label className="text-sm font-medium">Filter by Status:</label>
             <Select
               value={statusFilter}
@@ -190,7 +202,7 @@ export default function LeadsPage() {
                 setStatusFilter(value)
               }
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Filter by Status" />
               </SelectTrigger>
               <SelectContent>
@@ -202,7 +214,7 @@ export default function LeadsPage() {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <label className="text-sm font-medium">Group by:</label>
             <Select
               value={groupBy}
@@ -210,7 +222,7 @@ export default function LeadsPage() {
                 setGroupBy(value)
               }
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full sm:w-[180px]">
                 <SelectValue placeholder="Group by" />
               </SelectTrigger>
               <SelectContent>
@@ -219,7 +231,7 @@ export default function LeadsPage() {
               </SelectContent>
             </Select>
           </div>
-           <Button variant="ghost" onClick={handleClearFilters}>
+           <Button variant="ghost" onClick={handleClearFilters} className="w-full sm:w-auto">
             <X className="mr-2 h-4 w-4" />
             Clear All
           </Button>

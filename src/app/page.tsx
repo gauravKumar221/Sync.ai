@@ -11,7 +11,7 @@ export default function LandingPage() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center justify-between">
+        <div className="container flex h-14 items-center justify-between px-4 md:px-6">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo className="h-6 w-6" />
             <span className="font-bold">Sync.ai</span>
@@ -27,7 +27,7 @@ export default function LandingPage() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
+        <section className="container grid items-center gap-6 px-4 pb-8 pt-6 md:px-6 md:py-10">
           <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
             <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
               Convert Conversations <br className="hidden sm:inline" />
@@ -37,19 +37,19 @@ export default function LandingPage() {
               Capture leads from any platform, engage them with AI-powered auto-replies, and manage your entire sales pipeline in one powerful dashboard.
             </p>
           </div>
-          <div className="mx-auto flex flex-col sm:flex-row gap-4 w-full sm:w-auto max-w-sm">
+          <div className="mx-auto flex w-full max-w-sm flex-col gap-4 sm:flex-row">
             <Button asChild size="lg" className="w-full sm:w-auto">
               <Link href="/dashboard/overview">
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full smw-auto">
+            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
               <Link href="#capture">Capture Leads</Link>
             </Button>
           </div>
         </section>
 
-        <section id="capture" className="container py-12 md:py-20">
+        <section id="capture" className="container py-12 md:py-20 px-4 md:px-6">
           <div className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2">
             <div className="flex flex-col justify-center">
               <h2 className="text-3xl font-bold">Never Miss a Lead</h2>

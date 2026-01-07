@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { leads } from '@/lib/data';
+import { leads as allLeads } from '@/lib/data';
 import type { Lead, LeadSource } from '@/lib/types';
 import {
   ArrowRight,
@@ -17,6 +17,14 @@ import {
   User,
 } from 'lucide-react';
 import Link from 'next/link';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import { useState } from 'react';
 
 const SourceIcon = ({
   source,
@@ -65,20 +73,68 @@ function NotificationCard({ lead }: { lead: Lead }) {
   );
 }
 
+const LEADS_PER_PAGE = 20;
+
 export default function NotificationsPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(allLeads.length / LEADS_PER_PAGE);
+  const startIndex = (currentPage - 1) * LEADS_PER_PAGE;
+  const endIndex = startIndex + LEADS_PER_PAGE;
+  const currentLeads = allLeads.slice(startIndex, endIndex);
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Notifications</h1>
         <p className="text-muted-foreground">
-          You have {leads.length} new notifications.
+          You have {allLeads.length} new notifications.
         </p>
       </div>
       <div className="space-y-4">
-        {leads.map((lead) => (
+        {currentLeads.map((lead) => (
           <NotificationCard key={lead.id} lead={lead} />
         ))}
       </div>
+      {totalPages > 1 && (
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handlePreviousPage();
+                }}
+                className={currentPage === 1 ? 'pointer-events-none opacity-50' : ''}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <span className="p-4 text-sm font-medium">
+                Page {currentPage} of {totalPages}
+              </span>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNextPage();
+                }}
+                className={currentPage === totalPages ? 'pointer-events-none opacity-50' : ''}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </div>
   );
 }

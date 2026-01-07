@@ -1,17 +1,42 @@
 
+'use client';
+
 import Link from 'next/link';
 import { ArrowRight, MessageSquare, Zap } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { LeadForm } from '@/components/lead-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Logo from '@/components/logo';
 import Plasma from '@/components/ui/plasma';
+import { cn } from '@/lib/utils';
 
 export default function LandingPage() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const isScrolled = window.scrollY > 300;
+      if (isScrolled !== scrolled) {
+        setScrolled(isScrolled);
+      }
+    };
+
+    document.addEventListener('scroll', handleScroll);
+    return () => {
+      document.removeEventListener('scroll', handleScroll);
+    };
+  }, [scrolled]);
+
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 z-50 w-full">
+      <header
+        className={cn(
+          'sticky top-0 z-50 w-full transition-colors duration-300',
+          scrolled ? 'bg-background/80 backdrop-blur-sm border-b' : 'bg-transparent'
+        )}
+      >
         <div className="container mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4 md:px-6">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo className="h-6 w-6" />
@@ -28,9 +53,9 @@ export default function LandingPage() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="relative w-full">
-           <div className="absolute inset-0 -z-10 h-full w-full">
-            <Plasma 
+        <section className="relative w-full pt-12">
+          <div className="absolute inset-0 -z-10 h-full w-full">
+            <Plasma
               color="hsl(var(--primary))"
               speed={0.6}
               direction="forward"
@@ -39,7 +64,7 @@ export default function LandingPage() {
               mouseInteractive={true}
             />
           </div>
-          <div className="container mx-auto grid max-w-screen-xl items-center gap-6 px-4 pb-8 pt-12 md:px-6 md:py-20">
+          <div className="container mx-auto grid max-w-screen-xl items-center gap-6 px-4 pb-8 md:px-6 md:py-20">
             <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
               <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                 Convert Conversations <br className="hidden sm:inline" />

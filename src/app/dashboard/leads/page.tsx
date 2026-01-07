@@ -1,3 +1,4 @@
+
 'use client';
 import { LeadCard } from '@/components/leads/lead-card';
 import { leads as allLeadsData } from '@/lib/data';
@@ -26,7 +27,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, X } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { DateRange } from 'react-day-picker';
 import {
@@ -68,6 +69,13 @@ export default function LeadsPage() {
       setLeads(leads.filter((lead) => lead.id !== leadToDelete.id));
       setLeadToDelete(null);
     }
+  };
+
+  const handleClearFilters = () => {
+    setDateFilter('all');
+    setCustomDateRange(undefined);
+    setStatusFilter('All');
+    setGroupBy('status');
   };
 
   const filteredLeads = leads
@@ -224,6 +232,10 @@ export default function LeadsPage() {
               </SelectContent>
             </Select>
           </div>
+           <Button variant="ghost" onClick={handleClearFilters}>
+            <X className="mr-2 h-4 w-4" />
+            Clear All
+          </Button>
         </div>
       </div>
 

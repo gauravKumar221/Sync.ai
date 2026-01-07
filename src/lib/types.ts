@@ -25,6 +25,7 @@ export type Lead = {
   lastMessage: string;
   timestamp: string;
   avatarUrl: string;
+  createdAt: Date;
 };
 
 export type Message = {

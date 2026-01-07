@@ -20,6 +20,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Button } from '@/components/ui/button';
+import { CalendarIcon } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { DateRange } from 'react-day-picker';
+import {
+  startOfDay,
+  subDays,
+  subYears,
+  isWithinInterval,
+  format,
+} from 'date-fns';
 
 const statusOptions: (LeadStatus | 'All')[] = [
   'All',
@@ -30,11 +46,18 @@ const statusOptions: (LeadStatus | 'All')[] = [
 ];
 const statusOrder: LeadStatus[] = ['New', 'In Progress', 'Converted', 'Lost'];
 
+type DateFilterPreset = 'all' | 'today' | 'last7days' | 'lastyear' | 'custom';
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>(allLeadsData);
   const [groupBy, setGroupBy] = useState<'status' | 'assignedAgent'>('status');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'All'>('All');
   const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
+  const [dateFilter, setDateFilter] =
+    useState<DateFilterPreset>('all');
+  const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>(
+    undefined
+  );
 
   const handleDeleteConfirmation = (lead: Lead) => {
     setLeadToDelete(lead);
@@ -47,10 +70,42 @@ export default function LeadsPage() {
     }
   };
 
-  const filteredLeads =
-    statusFilter === 'All'
-      ? leads
-      : leads.filter((lead) => lead.status === statusFilter);
+  const filteredLeads = leads
+    .filter((lead) => {
+      if (statusFilter === 'All') return true;
+      return lead.status === statusFilter;
+    })
+    .filter((lead) => {
+      const now = new Date();
+      switch (dateFilter) {
+        case 'today':
+          return isWithinInterval(lead.createdAt, {
+            start: startOfDay(now),
+            end: now,
+          });
+        case 'last7days':
+          return isWithinInterval(lead.createdAt, {
+            start: subDays(now, 7),
+            end: now,
+          });
+        case 'lastyear':
+          return isWithinInterval(lead.createdAt, {
+            start: subYears(now, 1),
+            end: now,
+          });
+        case 'custom':
+          if (customDateRange?.from && customDateRange?.to) {
+            return isWithinInterval(lead.createdAt, {
+              start: startOfDay(customDateRange.from),
+              end: customDateRange.to,
+            });
+          }
+          return true;
+        case 'all':
+        default:
+          return true;
+      }
+    });
 
   const groupedLeads = filteredLeads.reduce(
     (acc, lead) => {
@@ -79,6 +134,59 @@ export default function LeadsPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Filter by Date:</label>
+            <Select
+              value={dateFilter}
+              onValueChange={(value: DateFilterPreset) => {
+                setDateFilter(value);
+                if (value !== 'custom') {
+                  setCustomDateRange(undefined);
+                }
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Filter by Date" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Time</SelectItem>
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="last7days">Last 7 Days</SelectItem>
+                <SelectItem value="lastyear">Last Year</SelectItem>
+              </SelectContent>
+            </Select>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={'outline'}
+                  className="w-[240px] justify-start text-left font-normal"
+                  onClick={() => setDateFilter('custom')}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {customDateRange?.from ? (
+                    customDateRange.to ? (
+                      <>
+                        {format(customDateRange.from, 'LLL dd, y')} -{' '}
+                        {format(customDateRange.to, 'LLL dd, y')}
+                      </>
+                    ) : (
+                      format(customDateRange.from, 'LLL dd, y')
+                    )
+                  ) : (
+                    <span>Pick a date range</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="range"
+                  selected={customDateRange}
+                  onSelect={setCustomDateRange}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
           <div className="flex items-center gap-2">
             <label className="text-sm font-medium">Filter by Status:</label>
             <Select
@@ -140,22 +248,29 @@ export default function LeadsPage() {
             </div>
           ))
         ) : (
-          <div className="text-center text-muted-foreground py-12">
-            No leads found for the selected filter.
+          <div className="py-12 text-center text-muted-foreground">
+            No leads found for the selected filters.
           </div>
         )}
       </div>
-      <AlertDialog open={!!leadToDelete} onOpenChange={(open) => !open && setLeadToDelete(null)}>
+      <AlertDialog
+        open={!!leadToDelete}
+        onOpenChange={(open) => !open && setLeadToDelete(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the lead for <span className="font-bold">{leadToDelete?.name}</span>.
+              This action cannot be undone. This will permanently delete the
+              lead for <span className="font-bold">{leadToDelete?.name}</span>.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteLead} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+            <AlertDialogAction
+              onClick={handleDeleteLead}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
               Delete
             </AlertDialogAction>
           </AlertDialogFooter>

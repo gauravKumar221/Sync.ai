@@ -1,10 +1,13 @@
 import { Agent, Lead, Conversation, Appointment, Transaction, LeadStatus, LeadSource } from './types';
+import { subDays, subWeeks, subMonths, formatDistanceToNow } from 'date-fns';
 
 export const agents: Agent[] = [
   { id: 'agent-1', name: 'Alex Johnson', avatarUrl: 'https://picsum.photos/seed/1/40/40' },
   { id: 'agent-2', name: 'Maria Garcia', avatarUrl: 'https://picsum.photos/seed/2/40/40' },
   { id: 'agent-3', name: 'James Brown', avatarUrl: 'https://picsum.photos/seed/3/40/40' },
 ];
+
+const now = new Date();
 
 export const leads: Lead[] = [
   {
@@ -17,6 +20,7 @@ export const leads: Lead[] = [
     lastMessage: 'Hi, I\'m interested in your services.',
     timestamp: '10:30 AM',
     avatarUrl: 'https://picsum.photos/seed/101/40/40',
+    createdAt: now,
   },
   {
     id: 'lead-2',
@@ -28,6 +32,7 @@ export const leads: Lead[] = [
     lastMessage: 'Can you provide more details about the pricing?',
     timestamp: 'Yesterday',
     avatarUrl: 'https://picsum.photos/seed/102/40/40',
+    createdAt: subDays(now, 1),
   },
   {
     id: 'lead-3',
@@ -39,6 +44,7 @@ export const leads: Lead[] = [
     lastMessage: 'Great, let\'s move forward with the plan.',
     timestamp: '2 days ago',
     avatarUrl: 'https://picsum.photos/seed/103/40/40',
+    createdAt: subDays(now, 2),
   },
   {
     id: 'lead-4',
@@ -50,6 +56,7 @@ export const leads: Lead[] = [
     lastMessage: 'Sorry, I\'m no longer interested.',
     timestamp: '3 days ago',
     avatarUrl: 'https://picsum.photos/seed/104/40/40',
+    createdAt: subDays(now, 3),
   },
   {
     id: 'lead-5',
@@ -61,6 +68,7 @@ export const leads: Lead[] = [
     lastMessage: 'Following up on our call last week.',
     timestamp: '4 days ago',
     avatarUrl: 'https://picsum.photos/seed/105/40/40',
+    createdAt: subDays(now, 4),
   },
   {
     id: 'lead-6',
@@ -72,6 +80,7 @@ export const leads: Lead[] = [
     lastMessage: 'I have a few questions about feature X.',
     timestamp: '5 days ago',
     avatarUrl: 'https://picsum.photos/seed/106/40/40',
+    createdAt: subDays(now, 5),
   },
   {
     id: 'lead-7',
@@ -83,6 +92,7 @@ export const leads: Lead[] = [
     lastMessage: 'Is there a discount for bulk purchases?',
     timestamp: '5 days ago',
     avatarUrl: 'https://picsum.photos/seed/107/40/40',
+    createdAt: subDays(now, 5),
   },
   {
     id: 'lead-8',
@@ -94,6 +104,7 @@ export const leads: Lead[] = [
     lastMessage: 'Checking in on the status of my inquiry.',
     timestamp: '6 days ago',
     avatarUrl: 'https://picsum.photos/seed/108/40/40',
+    createdAt: subDays(now, 6),
   },
   {
     id: 'lead-9',
@@ -105,6 +116,7 @@ export const leads: Lead[] = [
     lastMessage: 'Payment sent. Looking forward to starting.',
     timestamp: '1 week ago',
     avatarUrl: 'https://picsum.photos/seed/109/40/40',
+    createdAt: subWeeks(now, 1),
   },
   {
     id: 'lead-10',
@@ -116,6 +128,7 @@ export const leads: Lead[] = [
     lastMessage: 'How does your product compare to competitor Y?',
     timestamp: '1 week ago',
     avatarUrl: 'https://picsum.photos/seed/110/40/40',
+    createdAt: subWeeks(now, 1),
   },
   {
     id: 'lead-11',
@@ -127,6 +140,7 @@ export const leads: Lead[] = [
     lastMessage: 'We decided to go with another solution.',
     timestamp: '8 days ago',
     avatarUrl: 'https://picsum.photos/seed/111/40/40',
+    createdAt: subDays(now, 8),
   },
   {
     id: 'lead-12',
@@ -138,6 +152,7 @@ export const leads: Lead[] = [
     lastMessage: 'Thanks for the demo, we will discuss internally.',
     timestamp: '9 days ago',
     avatarUrl: 'https://picsum.photos/seed/112/40/40',
+    createdAt: subDays(now, 9),
   },
   {
     id: 'lead-13',
@@ -149,6 +164,7 @@ export const leads: Lead[] = [
     lastMessage: 'Can I get a trial version?',
     timestamp: '10 days ago',
     avatarUrl: 'https://picsum.photos/seed/113/40/40',
+    createdAt: subDays(now, 10),
   },
   {
     id: 'lead-14',
@@ -160,6 +176,7 @@ export const leads: Lead[] = [
     lastMessage: 'Met at the conference, interested in learning more.',
     timestamp: '11 days ago',
     avatarUrl: 'https://picsum.photos/seed/114/40/40',
+    createdAt: subDays(now, 11),
   },
   {
     id: 'lead-15',
@@ -171,6 +188,7 @@ export const leads: Lead[] = [
     lastMessage: 'The quote seems reasonable. What are the next steps?',
     timestamp: '12 days ago',
     avatarUrl: 'https://picsum.photos/seed/115/40/40',
+    createdAt: subDays(now, 12),
   },
   {
     id: 'lead-16',
@@ -182,6 +200,7 @@ export const leads: Lead[] = [
     lastMessage: 'Everything is set up, thank you for your help!',
     timestamp: '2 weeks ago',
     avatarUrl: 'https://picsum.photos/seed/116/40/40',
+    createdAt: subWeeks(now, 2),
   },
   {
     id: 'lead-17',
@@ -193,6 +212,7 @@ export const leads: Lead[] = [
     lastMessage: 'Just signed up on your website.',
     timestamp: '2 weeks ago',
     avatarUrl: 'https://picsum.photos/seed/117/40/40',
+    createdAt: subWeeks(now, 2),
   },
   {
     id: 'lead-18',
@@ -204,6 +224,7 @@ export const leads: Lead[] = [
     lastMessage: 'Could you clarify point 3 in the contract?',
     timestamp: '15 days ago',
     avatarUrl: 'https://picsum.photos/seed/118/40/40',
+    createdAt: subDays(now, 15),
   },
   {
     id: 'lead-19',
@@ -215,6 +236,7 @@ export const leads: Lead[] = [
     lastMessage: 'Referral from an existing customer.',
     timestamp: '16 days ago',
     avatarUrl: 'https://picsum.photos/seed/119/40/40',
+    createdAt: subDays(now, 16),
   },
   {
     id: 'lead-20',
@@ -226,6 +248,7 @@ export const leads: Lead[] = [
     lastMessage: 'The budget was not approved.',
     timestamp: '17 days ago',
     avatarUrl: 'https://picsum.photos/seed/120/40/40',
+    createdAt: subDays(now, 17),
   },
   {
     id: 'lead-21',
@@ -237,6 +260,7 @@ export const leads: Lead[] = [
     lastMessage: 'Interested in a demo.',
     timestamp: '18 days ago',
     avatarUrl: 'https://picsum.photos/seed/121/40/40',
+    createdAt: subDays(now, 18),
   },
   {
     id: 'lead-22',
@@ -248,6 +272,7 @@ export const leads: Lead[] = [
     lastMessage: 'Commented on our ad for more info.',
     timestamp: '19 days ago',
     avatarUrl: 'https://picsum.photos/seed/122/40/40',
+    createdAt: subDays(now, 19),
   },
   {
     id: 'lead-23',
@@ -259,6 +284,7 @@ export const leads: Lead[] = [
     lastMessage: 'Do you have documentation for the API?',
     timestamp: '20 days ago',
     avatarUrl: 'https://picsum.photos/seed/123/40/40',
+    createdAt: subDays(now, 20),
   },
   {
     id: 'lead-24',
@@ -270,6 +296,7 @@ export const leads: Lead[] = [
     lastMessage: 'Walk-in inquiry.',
     timestamp: '3 weeks ago',
     avatarUrl: 'https://picsum.photos/seed/124/40/40',
+    createdAt: subWeeks(now, 3),
   },
   {
     id: 'lead-25',
@@ -281,6 +308,7 @@ export const leads: Lead[] = [
     lastMessage: 'Submitted the contact form on the pricing page.',
     timestamp: '3 weeks ago',
     avatarUrl: 'https://picsum.photos/seed/125/40/40',
+    createdAt: subWeeks(now, 3),
   }
 ];
 

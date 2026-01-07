@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Logo from '@/components/logo';
 import Plasma from '@/components/ui/plasma';
 import { cn } from '@/lib/utils';
+import RotatingText from '@/components/ui/RotatingText';
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -90,7 +91,20 @@ export default function LandingPage() {
         <section id="capture" className="w-full py-12 md:py-20">
           <div className="container mx-auto grid max-w-4xl gap-12 px-4 md:grid-cols-2 md:px-6">
             <div className="flex flex-col justify-center">
-              <h2 className="text-3xl font-bold">Never Miss a Lead</h2>
+              <div className="text-3xl font-bold">
+                <RotatingText
+                  texts={['Lead Generation', 'WhatsApp', 'CRM', 'Facebook', 'Instagram']}
+                  mainClassName="px-2 sm:px-2 md:px-3 bg-cyan-300 text-black overflow-hidden py-0.5 sm:py-1 md:py-2 justify-center rounded-lg"
+                  staggerFrom={"last"}
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "-120%" }}
+                  staggerDuration={0.025}
+                  splitLevelClassName="overflow-hidden pb-0.5 sm:pb-1 md:pb-1"
+                  transition={{ type: "spring", damping: 30, stiffness: 400 }}
+                  rotationInterval={2000}
+                />
+              </div>
               <p className="mt-4 text-muted-foreground">
                 Our universal lead capture form can be embedded anywhere. Instantly sync leads from your website, social media, or any other source directly into your CRM.
               </p>

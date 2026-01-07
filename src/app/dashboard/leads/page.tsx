@@ -12,16 +12,6 @@ import {
 } from '@/components/ui/select';
 import { useState } from 'react';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -53,23 +43,11 @@ export default function LeadsPage() {
   const [leads, setLeads] = useState<Lead[]>(allLeadsData);
   const [groupBy, setGroupBy] = useState<'status' | 'assignedAgent'>('status');
   const [statusFilter, setStatusFilter] = useState<LeadStatus | 'All'>('All');
-  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
   const [dateFilter, setDateFilter] =
     useState<DateFilterPreset>('all');
   const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>(
     undefined
   );
-
-  const handleDeleteConfirmation = (lead: Lead) => {
-    setLeadToDelete(lead);
-  };
-
-  const handleDeleteLead = () => {
-    if (leadToDelete) {
-      setLeads(leads.filter((lead) => lead.id !== leadToDelete.id));
-      setLeadToDelete(null);
-    }
-  };
 
   const handleUpdateLead = (updatedLead: Lead) => {
     setLeads(leads.map(lead => lead.id === updatedLead.id ? updatedLead : lead));
@@ -256,7 +234,6 @@ export default function LeadsPage() {
                     <LeadCard
                       key={lead.id}
                       lead={lead}
-                      onDelete={() => handleDeleteConfirmation(lead)}
                       onUpdate={handleUpdateLead}
                     />
                   ))}
@@ -270,33 +247,6 @@ export default function LeadsPage() {
           </div>
         )}
       </div>
-      <AlertDialog
-        open={!!leadToDelete}
-        onOpenChange={(open) => {
-          if (!open) {
-            setLeadToDelete(null);
-          }
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              lead for <span className="font-bold">{leadToDelete?.name}</span>.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteLead}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

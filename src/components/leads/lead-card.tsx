@@ -11,7 +11,7 @@ import type { Lead, LeadPriority, LeadStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { GripVertical, Trash2, MoreVertical, Octagon, AlertTriangle, Circle } from 'lucide-react';
+import { GripVertical, MoreVertical, Octagon, AlertTriangle, Circle } from 'lucide-react';
 import Link from 'next/link';
 import {
   DropdownMenu,
@@ -92,7 +92,7 @@ const PriorityIcon = ({ priority }: { priority: LeadPriority }) => {
   }
 };
 
-export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: () => void, onUpdate: (lead: Lead) => void }) {
+export function LeadCard({ lead, onUpdate }: { lead: Lead, onUpdate: (lead: Lead) => void }) {
 
   const handlePriorityChange = (priority: LeadPriority) => {
     onUpdate({ ...lead, priority });
@@ -134,7 +134,6 @@ export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: (
             side="bottom"
             align="start"
             className="w-96 rounded-xl border-2 p-4 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
             >
             <div className="flex flex-col gap-3">
                 <div className="flex items-start justify-between">
@@ -187,7 +186,7 @@ export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: (
                 <MoreVertical className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuContent>
                 <DropdownMenuSub>
                 <DropdownMenuSubTrigger>Set Priority</DropdownMenuSubTrigger>
                 <DropdownMenuPortal>
@@ -200,15 +199,6 @@ export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: (
                     </DropdownMenuSubContent>
                 </DropdownMenuPortal>
                 </DropdownMenuSub>
-                <DropdownMenuItem
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete();
-                    }}
-                    >
-                    <Trash2 className="mr-2 h-4 w-4 text-red-500" />
-                    <span className="text-red-500">Delete</span>
-                </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
       </div>

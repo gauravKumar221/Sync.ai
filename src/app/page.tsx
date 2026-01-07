@@ -32,6 +32,7 @@ export default function LandingPage() {
            <div
             className="absolute inset-0 -z-10 animate-background-shine bg-[200%_auto] bg-[radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"
           ></div>
+          <div className="absolute inset-0 -z-10 bg-black/50"></div>
           <div className="container mx-auto grid max-w-screen-xl items-center gap-6 px-4 pb-8 pt-12 md:px-6 md:py-20">
             <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
               <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">

@@ -1,8 +1,9 @@
 
+
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   Users,
@@ -60,12 +61,17 @@ const userProfileImage = PlaceHolderImages.find(p => p.id === 'user-profile');
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const { state } = useSidebar();
   const isMobile = useIsMobile();
   const isCollapsed = state === 'collapsed';
 
   const isActive = (href: string) => {
     return pathname === href;
+  };
+
+  const handleLogout = () => {
+    router.push('/login');
   };
 
   return (
@@ -134,7 +140,7 @@ export function SidebarNav() {
               <DropdownMenuItem>Billing</DropdownMenuItem>
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Log out</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

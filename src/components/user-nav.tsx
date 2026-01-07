@@ -1,3 +1,6 @@
+
+'use client';
+
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { Button } from './ui/button';
 import {
@@ -15,6 +18,7 @@ import { leads } from '@/lib/data';
 import { LeadSource } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const userProfileImage = PlaceHolderImages.find(p => p.id === 'user-profile');
 
@@ -37,6 +41,11 @@ const SourceIcon = ({ source, className }: { source: LeadSource, className?: str
 
 export function UserNav() {
   const recentLeads = leads.slice(0, 4);
+  const router = useRouter();
+
+  const handleLogout = () => {
+    router.push('/login');
+  };
 
   return (
     <div className="flex items-center gap-4">
@@ -111,7 +120,7 @@ export function UserNav() {
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
             <span>Log out</span>
           </DropdownMenuItem>

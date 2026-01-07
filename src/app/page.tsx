@@ -13,7 +13,7 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo className="h-6 w-6" />
-            <span className="font-bold">LeadFlowAI</span>
+            <span className="font-bold">Sync.ai</span>
           </Link>
         </div>
       </header>

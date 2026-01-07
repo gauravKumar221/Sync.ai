@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'LeadFlowAI',
-  description: 'Convert Conversations into Customers',
+  title: 'Sync.ai',
+  description: 'The all-in-one platform for customer engagement.',
 };
 
 export default function RootLayout({

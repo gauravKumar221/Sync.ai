@@ -11,8 +11,14 @@ import type { Lead, LeadStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { GripVertical } from 'lucide-react';
+import { GripVertical, Trash2, MoreVertical } from 'lucide-react';
 import Link from 'next/link';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
 const getStatusBadgeVariant = (status: LeadStatus) => {
   switch (status) {
@@ -42,12 +48,12 @@ const getStatusInitial = (status: LeadStatus) => {
   }
 };
 
-export function LeadCard({ lead }: { lead: Lead }) {
+export function LeadCard({ lead, onDelete }: { lead: Lead, onDelete: () => void }) {
   return (
     <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="group flex cursor-pointer items-center gap-4 border-b p-3 pr-8 transition-colors last:border-b-0 hover:bg-muted/50">
+          <div className="group flex cursor-pointer items-center gap-4 border-b p-3 pr-4 transition-colors last:border-b-0 hover:bg-muted/50">
             <div className="flex items-center gap-3">
               <GripVertical className="h-4 w-4 text-muted-foreground/50 transition-opacity group-hover:opacity-100 md:opacity-0" />
               <Checkbox />
@@ -70,6 +76,19 @@ export function LeadCard({ lead }: { lead: Lead }) {
               <div className="w-24 text-right text-xs text-muted-foreground">
                 {lead.timestamp}
               </div>
+               <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                   <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <MoreVertical className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(); }}>
+                    <Trash2 className="mr-2 h-4 w-4 text-red-500" />
+                    <span className="text-red-500">Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </TooltipTrigger>
@@ -77,6 +96,7 @@ export function LeadCard({ lead }: { lead: Lead }) {
           side="bottom"
           align="start"
           className="w-96 rounded-xl border-2 p-4 shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
         >
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">

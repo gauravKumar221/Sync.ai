@@ -98,7 +98,7 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
                 cell: cn(
                   "relative h-full text-left p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors focus-within:relative focus-within:z-20"
                 ),
-                day: "absolute top-2 left-2 text-sm font-medium text-foreground",
+                day: "absolute top-2 left-2 text-sm font-medium",
                 day_today: "bg-primary text-primary-foreground",
                 day_selected: "bg-accent text-accent-foreground border-2 border-primary",
                 day_outside: "text-muted-foreground/30",

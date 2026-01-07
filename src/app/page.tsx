@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { LeadForm } from '@/components/lead-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Logo from '@/components/logo';
-import Plasma from '@/components/ui/plasma';
 import { cn } from '@/lib/utils';
 import RotatingText from '@/components/ui/RotatingText';
 import { motion } from 'framer-motion';
@@ -56,16 +55,6 @@ export default function LandingPage() {
       </header>
       <main className="flex-1">
         <section className="relative w-full h-screen flex items-center justify-center -mt-14">
-          <div className="absolute inset-0 -z-10 h-full w-full">
-            <Plasma
-              color="#ffffff"
-              speed={0.6}
-              direction="forward"
-              scale={1.1}
-              opacity={0.3}
-              mouseInteractive={true}
-            />
-          </div>
           <div className="container mx-auto flex flex-col items-center gap-6 px-4 md:px-6">
             <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
               <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">

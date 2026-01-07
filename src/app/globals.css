@@ -89,3 +89,13 @@
     background: hsl(var(--accent));
   }
 }
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(to right, hsl(var(--accent)), hsl(var(--primary)));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+}

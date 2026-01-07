@@ -70,7 +70,7 @@ export default function LandingPage() {
             <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">
               <h1 className="text-3xl font-extrabold leading-tight tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl">
                 Convert Conversations <br className="hidden sm:inline" />
-                into Customers
+                into <span className="text-gradient">Customers</span>
               </h1>
               <p className="max-w-2xl text-lg text-muted-foreground">
                 Capture leads from any platform, engage them with AI-powered auto-replies, and manage your entire sales pipeline in one powerful dashboard.

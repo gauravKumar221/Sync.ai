@@ -11,7 +11,7 @@ import type { Lead, LeadPriority, LeadStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { GripVertical, Trash2, MoreVertical, AlertTriangle, Circle, Octagon } from 'lucide-react';
+import { GripVertical, Trash2, MoreVertical, Octagon, AlertTriangle, Circle } from 'lucide-react';
 import Link from 'next/link';
 import {
   DropdownMenu,

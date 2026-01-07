@@ -30,6 +30,7 @@ interface ChatLayoutProps {
   navCollapsedSize: number;
   leads: Lead[];
   conversations: Conversation[];
+  defaultSelectedLeadId?: string | null;
 }
 
 export function ChatLayout({
@@ -38,9 +39,10 @@ export function ChatLayout({
   navCollapsedSize,
   leads,
   conversations,
+  defaultSelectedLeadId,
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedLeadId, setSelectedLeadId] = React.useState<string>(leads[0].id);
+  const [selectedLeadId, setSelectedLeadId] = React.useState<string>(defaultSelectedLeadId ?? leads[0].id);
   const { toast } = useToast();
 
   const selectedConversation = conversations.find(c => c.lead.id === selectedLeadId);

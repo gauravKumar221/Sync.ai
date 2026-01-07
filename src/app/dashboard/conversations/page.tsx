@@ -1,7 +1,12 @@
+'use client'
 import { ChatLayout } from "@/components/conversations/chat-layout";
 import { conversations, leads } from "@/lib/data";
+import { useSearchParams } from "next/navigation";
 
 export default function ConversationsPage() {
+  const searchParams = useSearchParams();
+  const leadId = searchParams.get('leadId');
+
   const defaultLayout = [265, 440, 655];
   return (
     <div className="space-y-8">
@@ -17,6 +22,7 @@ export default function ConversationsPage() {
           leads={leads}
           conversations={conversations}
           navCollapsedSize={4}
+          defaultSelectedLeadId={leadId}
         />
       </div>
        <div className="md:hidden text-center text-muted-foreground">

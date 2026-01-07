@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { GripVertical } from 'lucide-react';
+import Link from 'next/link';
 
 const getStatusBadgeVariant = (status: LeadStatus) => {
   switch (status) {
@@ -107,7 +108,9 @@ export function LeadCard({ lead }: { lead: Lead }) {
               <div className="text-xs text-muted-foreground">
                 Assigned to: {lead.assignedAgent.name}
               </div>
-              <Button size="sm">View Conversation</Button>
+              <Button size="sm" asChild>
+                <Link href={`/dashboard/conversations?leadId=${lead.id}`}>View Conversation</Link>
+              </Button>
             </div>
           </div>
         </TooltipContent>

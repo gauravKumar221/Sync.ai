@@ -29,9 +29,6 @@ export default function LandingPage() {
       <main className="flex-1">
         <section className="relative w-full">
            <div className="absolute inset-0 -z-10 h-full w-full bg-background bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]"></div>
-           <div
-            className="absolute inset-0 -z-10 animate-background-shine bg-[200%_auto] bg-[radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]"
-          ></div>
           <div className="absolute inset-0 -z-10 bg-black/50"></div>
           <div className="container mx-auto grid max-w-screen-xl items-center gap-6 px-4 pb-8 pt-12 md:px-6 md:py-20">
             <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">

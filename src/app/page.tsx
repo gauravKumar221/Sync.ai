@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { ArrowRight, MessageSquare, Zap } from 'lucide-react';
 
@@ -10,12 +11,12 @@ export default function LandingPage() {
   return (
     <div className="flex min-h-screen w-full flex-col">
       <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center">
+        <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo className="h-6 w-6" />
             <span className="font-bold">Sync.ai</span>
           </Link>
-          <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4">
             <Button asChild variant="ghost">
               <Link href="/login">Login</Link>
             </Button>
@@ -42,7 +43,7 @@ export default function LandingPage() {
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+            <Button asChild size="lg" variant="outline" className="w-full smw-auto">
               <Link href="#capture">Capture Leads</Link>
             </Button>
           </div>

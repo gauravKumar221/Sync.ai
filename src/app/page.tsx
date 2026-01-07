@@ -49,8 +49,8 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section id="capture" className="container py-12 md:py-20 px-4 md:px-6">
-          <div className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2">
+        <section id="capture" className="w-full py-12 md:py-20">
+          <div className="container mx-auto grid max-w-4xl gap-12 px-4 md:grid-cols-2 md:px-6">
             <div className="flex flex-col justify-center">
               <h2 className="text-3xl font-bold">Never Miss a Lead</h2>
               <p className="mt-4 text-muted-foreground">

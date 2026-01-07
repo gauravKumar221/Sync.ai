@@ -81,7 +81,7 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
-      <Card className="lg:col-span-2 h-full flex flex-col">
+      <Card className="lg:col-span-2 h-full flex flex-col bg-card">
         <CardContent className="p-2 md:p-4 flex-grow">
           <Calendar
             mode="single"
@@ -90,19 +90,24 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
             className="h-full w-full"
             classNames={{
                 root: "h-full flex flex-col",
+                caption: "flex justify-between items-center px-2 pt-2 pb-4",
+                caption_label: "text-xl font-bold",
+                nav_button: "h-8 w-8",
                 months: "flex-grow",
                 month: "h-full flex flex-col",
                 table: "h-full",
-                head_row: "grid grid-cols-7",
+                head_row: "grid grid-cols-7 mb-2",
+                head_cell: "text-muted-foreground uppercase text-xs",
                 body: "flex-grow grid grid-cols-7 grid-rows-5 gap-2",
                 row: "contents",
                 cell: cn(
                   "relative h-full text-left p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors"
                 ),
-                day: "absolute top-2 left-2",
-                day_today: "bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center",
-                day_selected: "bg-accent text-accent-foreground rounded-full w-8 h-8 flex items-center justify-center",
-                day_outside: "text-muted-foreground/50",
+                day_today: "bg-primary text-primary-foreground",
+                day_selected: "bg-accent text-accent-foreground",
+                day_outside: "text-muted-foreground/30",
+                day_disabled: "text-muted-foreground/30",
+                day: "absolute top-2 left-2 text-sm",
             }}
             components={{
               DayContent: ({ date, ...props }) => {
@@ -110,7 +115,11 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
                 const eventCount = eventsByDate[dateKey];
                 return (
                   <>
-                    <div>{getDate(date)}</div>
+                    <div className={cn(
+                        "absolute top-2 left-2",
+                        props.selected && "text-accent-foreground",
+                        props.today && "text-primary-foreground"
+                    )}>{getDate(date)}</div>
                     {eventCount > 0 && (
                       <div className="absolute bottom-2 left-2 flex items-center gap-1">
                         <span className="w-2 h-2 bg-red-500 rounded-full"></span>

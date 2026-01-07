@@ -14,6 +14,7 @@ import { Bell, CreditCard, LogOut, Settings, User, MessageSquare, Globe, Faceboo
 import { leads } from '@/lib/data';
 import { LeadSource } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 const userProfileImage = PlaceHolderImages.find(p => p.id === 'user-profile');
 
@@ -94,9 +95,11 @@ export function UserNav() {
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/profile">
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
               <CreditCard className="mr-2 h-4 w-4" />

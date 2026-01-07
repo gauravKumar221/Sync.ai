@@ -1,7 +1,8 @@
 
 import { Suspense } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ConversationsClientPage } from '@/components/conversations/conversations-client-page';
+import { ChatLayout } from '@/components/conversations/chat-layout';
+import { conversations, leads } from '@/lib/data';
 
 function LoadingSkeleton() {
     return (
@@ -16,6 +17,8 @@ function LoadingSkeleton() {
 }
 
 export default function ConversationsPage() {
+  const defaultLayout = [265, 440, 655];
+
   return (
     <div className="space-y-8">
        <div>
@@ -26,7 +29,12 @@ export default function ConversationsPage() {
       </div>
       <div className="hidden flex-col md:flex">
         <Suspense fallback={<LoadingSkeleton />}>
-            <ConversationsClientPage />
+            <ChatLayout
+              defaultLayout={defaultLayout}
+              leads={leads}
+              conversations={conversations}
+              navCollapsedSize={4}
+            />
         </Suspense>
       </div>
        <div className="md:hidden text-center text-muted-foreground">

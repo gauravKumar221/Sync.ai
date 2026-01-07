@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   ResizableHandle,
   ResizablePanel,
@@ -8,16 +9,12 @@ import {
 } from '@/components/ui/resizable';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import {
-  CornerDownLeft,
   Facebook,
   Globe,
   MessageSquare,
-  Mic,
-  Paperclip,
   Send,
   User,
 } from 'lucide-react';
@@ -26,12 +23,6 @@ import type { Lead, Conversation, LeadSource } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { summarizeLeadConversation } from '@/ai/flows/summarize-lead-conversation';
 import { useToast } from '@/hooks/use-toast';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { ScrollArea } from '../ui/scroll-area';
 
 interface ChatLayoutProps {
@@ -40,7 +31,6 @@ interface ChatLayoutProps {
   navCollapsedSize: number;
   leads: Lead[];
   conversations: Conversation[];
-  defaultSelectedLeadId?: string | null;
 }
 
 const leadSources: (LeadSource | 'All')[] = ['All', 'WhatsApp', 'Website', 'Facebook', 'Manual'];
@@ -60,20 +50,27 @@ const SourceIcon = ({ source }: { source: LeadSource }) => {
   }
 };
 
-
 export function ChatLayout({
   defaultLayout = [320, 1115],
   defaultCollapsed = false,
   navCollapsedSize,
   leads,
   conversations,
-  defaultSelectedLeadId,
 }: ChatLayoutProps) {
+  const searchParams = useSearchParams();
+  const leadId = searchParams.get('leadId');
+
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-  const [selectedLeadId, setSelectedLeadId] = React.useState<string>(defaultSelectedLeadId ?? leads[0].id);
+  const [selectedLeadId, setSelectedLeadId] = React.useState<string>(leadId ?? leads[0].id);
   const [sourceFilter, setSourceFilter] = React.useState<LeadSource | 'All'>('All');
   const { toast } = useToast();
 
+  React.useEffect(() => {
+    if (leadId) {
+      setSelectedLeadId(leadId);
+    }
+  }, [leadId]);
+  
   const selectedConversation = conversations.find(c => c.lead.id === selectedLeadId);
 
   const handleSummarize = async () => {

@@ -33,7 +33,7 @@ export default function LandingPage() {
     <div className="flex min-h-screen w-full flex-col">
       <header
         className={cn(
-          'absolute top-0 z-50 w-full transition-colors duration-300',
+          'sticky top-0 z-50 w-full transition-colors duration-300',
           scrolled ? 'bg-background/80 backdrop-blur-sm border-b' : 'bg-transparent'
         )}
       >
@@ -53,7 +53,7 @@ export default function LandingPage() {
         </div>
       </header>
       <main className="flex-1">
-        <section className="relative w-full h-screen flex items-center justify-center">
+        <section className="relative w-full h-screen flex items-center justify-center -mt-14">
           <div className="absolute inset-0 -z-10 h-full w-full">
             <Plasma
               color="#ffffff"

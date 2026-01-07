@@ -12,7 +12,7 @@ import Logo from '@/components/logo';
 import Plasma from '@/components/ui/plasma';
 import { cn } from '@/lib/utils';
 import RotatingText from '@/components/ui/RotatingText';
-import { motion } from 'motion/react';
+import { motion } from 'framer-motion';
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);

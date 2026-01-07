@@ -32,6 +32,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface ChatLayoutProps {
   defaultLayout: number[] | undefined;
@@ -135,7 +136,7 @@ export function ChatLayout({
           setIsCollapsed(false);
           document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`;
         }}
-        className={cn(isCollapsed && 'min-w-[50px] transition-all duration-300 ease-in-out')}
+        className={cn(isCollapsed && 'min-w-[50px] transition-all duration-300 ease-in-out', 'flex flex-col')}
       >
         <div className={cn('flex h-auto items-center', isCollapsed ? 'h-[56px] justify-center' : 'p-2')}>
           <Tabs defaultValue={sourceFilter} onValueChange={(value) => setSourceFilter(value as LeadSource | 'All')} className="w-full">
@@ -149,36 +150,38 @@ export function ChatLayout({
           </Tabs>
         </div>
         <Separator />
-        <div className="p-2 space-y-1">
-          {filteredLeads.map(lead => (
-            <button
-              key={lead.id}
-              onClick={() => setSelectedLeadId(lead.id)}
-              className={cn(
-                'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-green-600 hover:text-white group',
-                selectedLeadId === lead.id && 'bg-muted'
-              )}
-            >
-              <div className="flex w-full items-center gap-2">
-                <Avatar className="h-8 w-8">
-                  <AvatarImage src={lead.avatarUrl} />
-                  <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                  <div className="font-semibold">{lead.name}</div>
-                  <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.phone}</div>
+        <ScrollArea className="flex-1">
+            <div className="p-2 space-y-1">
+            {filteredLeads.map(lead => (
+                <button
+                key={lead.id}
+                onClick={() => setSelectedLeadId(lead.id)}
+                className={cn(
+                    'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-green-600 hover:text-white group',
+                    selectedLeadId === lead.id && 'bg-muted'
+                )}
+                >
+                <div className="flex w-full items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                    <AvatarImage src={lead.avatarUrl} />
+                    <AvatarFallback>{lead.name.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                    <div className="font-semibold">{lead.name}</div>
+                    <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.phone}</div>
+                    </div>
+                    <div className='flex flex-col items-end gap-1'>
+                    <SourceIcon source={lead.source} />
+                    <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.timestamp}</div>
+                    </div>
                 </div>
-                <div className='flex flex-col items-end gap-1'>
-                  <SourceIcon source={lead.source} />
-                  <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.timestamp}</div>
+                <div className="line-clamp-2 text-xs text-muted-foreground group-hover:text-gray-300">
+                    {lead.lastMessage.substring(0, 300)}
                 </div>
-              </div>
-              <div className="line-clamp-2 text-xs text-muted-foreground group-hover:text-gray-300">
-                {lead.lastMessage.substring(0, 300)}
-              </div>
-            </button>
-          ))}
-        </div>
+                </button>
+            ))}
+            </div>
+        </ScrollArea>
       </ResizablePanel>
       <ResizableHandle withHandle />
       <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>

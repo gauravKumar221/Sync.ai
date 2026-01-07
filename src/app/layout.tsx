@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
 export const metadata: Metadata = {
-  title: 'LeadFlowAI',
+  title: 'sync.ai',
   description: 'The all-in-one platform for customer engagement.',
 };
 

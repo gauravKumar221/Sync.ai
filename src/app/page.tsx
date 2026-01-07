@@ -42,7 +42,7 @@ export default function LandingPage() {
         <div className="container mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4 md:px-6">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo className="h-6 w-6" />
-            <span className="font-bold">LeadFlowAI</span>
+            <span className="font-bold">sync.ai</span>
           </Link>
           <div className="flex items-center space-x-2 md:space-x-4">
             <Button asChild variant="ghost">

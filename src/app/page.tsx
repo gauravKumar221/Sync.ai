@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { LeadForm } from '@/components/lead-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Logo from '@/components/logo';
+import Plasma from '@/components/ui/plasma';
 
 export default function LandingPage() {
   return (
@@ -28,7 +29,15 @@ export default function LandingPage() {
       </header>
       <main className="flex-1">
         <section className="relative w-full">
-          <div className="absolute inset-0 -z-10 h-full w-full bg-gradient-to-br from-primary/10 via-background to-background">
+           <div className="absolute inset-0 -z-10 h-full w-full">
+            <Plasma 
+              color="hsl(var(--primary))"
+              speed={0.6}
+              direction="forward"
+              scale={1.1}
+              opacity={0.3}
+              mouseInteractive={true}
+            />
           </div>
           <div className="container mx-auto grid max-w-screen-xl items-center gap-6 px-4 pb-8 pt-12 md:px-6 md:py-20">
             <div className="mx-auto flex max-w-4xl flex-col items-center gap-4 text-center">

@@ -8,6 +8,7 @@ export type NavItem = {
 
 export type LeadStatus = 'New' | 'In Progress' | 'Converted' | 'Lost';
 export type LeadSource = 'WhatsApp' | 'Website' | 'Facebook' | 'Manual' | 'All';
+export type LeadPriority = 'Low' | 'Medium' | 'High';
 
 export type Agent = {
   id: string;
@@ -21,6 +22,7 @@ export type Lead = {
   phone: string;
   source: LeadSource;
   status: LeadStatus;
+  priority: LeadPriority;
   assignedAgent: Agent;
   lastMessage: string;
   timestamp: string;

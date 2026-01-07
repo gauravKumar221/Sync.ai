@@ -71,6 +71,10 @@ export default function LeadsPage() {
     }
   };
 
+  const handleUpdateLead = (updatedLead: Lead) => {
+    setLeads(leads.map(lead => lead.id === updatedLead.id ? updatedLead : lead));
+  }
+
   const handleClearFilters = () => {
     setDateFilter('all');
     setCustomDateRange(undefined);
@@ -253,6 +257,7 @@ export default function LeadsPage() {
                       key={lead.id}
                       lead={lead}
                       onDelete={() => handleDeleteConfirmation(lead)}
+                      onUpdate={handleUpdateLead}
                     />
                   ))}
                 </div>

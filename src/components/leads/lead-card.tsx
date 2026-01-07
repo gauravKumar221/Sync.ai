@@ -7,16 +7,22 @@ import {
 } from '@/components/ui/tooltip';
 import { Badge } from '../ui/badge';
 import { Checkbox } from '../ui/checkbox';
-import type { Lead, LeadStatus } from '@/lib/types';
+import type { Lead, LeadPriority, LeadStatus } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { GripVertical, Trash2, MoreVertical } from 'lucide-react';
+import { GripVertical, Trash2, MoreVertical, AlertTriangle, Circle, Octagon } from 'lucide-react';
 import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
 
@@ -48,7 +54,23 @@ const getStatusInitial = (status: LeadStatus) => {
   }
 };
 
-export function LeadCard({ lead, onDelete }: { lead: Lead, onDelete: () => void }) {
+const PriorityIcon = ({ priority }: { priority: LeadPriority }) => {
+  switch (priority) {
+    case 'Low':
+      return <Circle className="h-3 w-3 text-green-500" />;
+    case 'Medium':
+      return <AlertTriangle className="h-3 w-3 text-yellow-500" />;
+    case 'High':
+      return <Octagon className="h-3 w-3 text-red-500" fill="currentColor" />;
+  }
+};
+
+export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: () => void, onUpdate: (lead: Lead) => void }) {
+
+  const handlePriorityChange = (priority: LeadPriority) => {
+    onUpdate({ ...lead, priority });
+  };
+  
   return (
     <TooltipProvider delayDuration={100}>
       <Tooltip>
@@ -69,7 +91,10 @@ export function LeadCard({ lead, onDelete }: { lead: Lead, onDelete: () => void 
               >
                 {getStatusInitial(lead.status)}
               </Badge>
-              <div className="w-20 truncate font-medium">{lead.name}</div>
+              <div className="w-20 truncate font-medium flex items-center gap-2">
+                <PriorityIcon priority={lead.priority} />
+                {lead.name}
+              </div>
               <div className="flex-1 truncate text-muted-foreground">
                 {lead.lastMessage}
               </div>
@@ -82,7 +107,19 @@ export function LeadCard({ lead, onDelete }: { lead: Lead, onDelete: () => void 
                     <MoreVertical className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
+                   <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>Set Priority</DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                         <DropdownMenuRadioGroup value={lead.priority} onValueChange={(value) => handlePriorityChange(value as LeadPriority)}>
+                          <DropdownMenuRadioItem value="High">High</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="Medium">Medium</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="Low">Low</DropdownMenuRadioItem>
+                        </DropdownMenuRadioGroup>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
                   <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onDelete(); }}>
                     <Trash2 className="mr-2 h-4 w-4 text-red-500" />
                     <span className="text-red-500">Delete</span>

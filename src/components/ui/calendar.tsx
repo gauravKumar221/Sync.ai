@@ -39,7 +39,7 @@ function Calendar({
         cell: "h-24 w-full text-center text-sm p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20",
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "h-full w-full p-0 font-normal aria-selected:opacity-100 rounded-md hover:bg-accent/50"
+          "h-full w-full p-0 font-normal aria-selected:opacity-100 rounded-md"
         ),
         day_range_end: "day-range-end",
         day_selected:
@@ -64,7 +64,7 @@ function Calendar({
           }
           return (
             <div className="flex flex-col h-full w-full p-2">
-              <span>{date.getDate()}</span>
+              <span className="self-start">{date.getDate()}</span>
             </div>
           )
         }

@@ -13,7 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
 import { CornerDownLeft, Mic, Paperclip, Send } from 'lucide-react';
 import { Textarea } from '../ui/textarea';
-import type { Lead, Conversation } from '@/lib/types';
+import type { Lead, Conversation, LeadSource } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { summarizeLeadConversation } from '@/ai/flows/summarize-lead-conversation';
 import { useToast } from '@/hooks/use-toast';
@@ -33,6 +33,9 @@ interface ChatLayoutProps {
   defaultSelectedLeadId?: string | null;
 }
 
+const leadSources: (LeadSource | 'All')[] = ['All', 'WhatsApp', 'Website', 'Facebook', 'Manual'];
+
+
 export function ChatLayout({
   defaultLayout = [320, 1115],
   defaultCollapsed = false,
@@ -43,6 +46,7 @@ export function ChatLayout({
 }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
   const [selectedLeadId, setSelectedLeadId] = React.useState<string>(defaultSelectedLeadId ?? leads[0].id);
+  const [sourceFilter, setSourceFilter] = React.useState<LeadSource | 'All'>('All');
   const { toast } = useToast();
 
   const selectedConversation = conversations.find(c => c.lead.id === selectedLeadId);
@@ -81,6 +85,10 @@ export function ChatLayout({
     }
   };
 
+  const filteredLeads = leads.filter(lead => 
+    sourceFilter === 'All' || lead.source === sourceFilter
+  );
+
   return (
     <ResizablePanelGroup
       direction="horizontal"
@@ -105,17 +113,18 @@ export function ChatLayout({
         }}
         className={cn(isCollapsed && 'min-w-[50px] transition-all duration-300 ease-in-out')}
       >
-        <div className={cn('flex h-[56px] items-center justify-center', isCollapsed ? 'h-[56px]' : 'px-2')}>
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="all">All</TabsTrigger>
-              <TabsTrigger value="unread">Unread</TabsTrigger>
+        <div className={cn('flex h-auto items-center justify-center', isCollapsed ? 'h-[56px]' : 'p-2')}>
+          <Tabs defaultValue={sourceFilter} onValueChange={(value) => setSourceFilter(value as LeadSource | 'All')} className="w-full">
+            <TabsList className="grid w-full h-auto grid-cols-3">
+               {leadSources.map(source => (
+                 <TabsTrigger key={source} value={source}>{source}</TabsTrigger>
+               ))}
             </TabsList>
           </Tabs>
         </div>
         <Separator />
         <div className="p-2 space-y-1">
-          {leads.map(lead => (
+          {filteredLeads.map(lead => (
             <button
               key={lead.id}
               onClick={() => setSelectedLeadId(lead.id)}

@@ -15,6 +15,14 @@ export default function LandingPage() {
             <Logo className="h-6 w-6" />
             <span className="font-bold">Sync.ai</span>
           </Link>
+          <div className="flex flex-1 items-center justify-end space-x-4">
+            <Button asChild variant="ghost">
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/register">Sign Up</Link>
+            </Button>
+          </div>
         </div>
       </header>
       <main className="flex-1">
@@ -31,11 +39,11 @@ export default function LandingPage() {
           <div className="mx-auto flex max-w-sm gap-4">
             <Button asChild size="lg">
               <Link href="/dashboard/overview">
-                View Demo <ArrowRight className="ml-2 h-4 w-4" />
+                Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
-              <Link href="#features">Connect WhatsApp</Link>
+              <Link href="#capture">Capture Leads</Link>
             </Button>
           </div>
         </section>

@@ -50,12 +50,3 @@ export type Transaction = {
   amount: number;
   description: string;
 };
-
-export type Appointment = {
-  id: string;
-  clientName: string;
-  date: Date;
-  purpose: string;
-  assignedAgent: Agent;
-  leadId: string;
-};

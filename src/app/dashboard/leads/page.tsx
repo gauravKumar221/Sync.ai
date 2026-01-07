@@ -60,54 +60,59 @@ export default function LeadsPage() {
     setGroupBy('status');
   };
 
-  const filteredLeads = leads
-    .filter((lead) => {
-      if (statusFilter === 'All') return true;
-      return lead.status === statusFilter;
-    })
-    .filter((lead) => {
-      const now = new Date();
-      switch (dateFilter) {
-        case 'today':
-          return isWithinInterval(lead.createdAt, {
-            start: startOfDay(now),
-            end: now,
-          });
-        case 'last7days':
-          return isWithinInterval(lead.createdAt, {
-            start: subDays(now, 7),
-            end: now,
-          });
-        case 'lastyear':
-          return isWithinInterval(lead.createdAt, {
-            start: subYears(now, 1),
-            end: now,
-          });
-        case 'custom':
-          if (customDateRange?.from && customDateRange?.to) {
-            return isWithinInterval(lead.createdAt, {
-              start: startOfDay(customDateRange.from),
-              end: customDateRange.to,
-            });
-          }
-          return true;
-        case 'all':
-        default:
-          return true;
-      }
-    });
+  const filteredLeads = leads.filter((lead) => {
+    // Status filter
+    if (statusFilter !== 'All' && lead.status !== statusFilter) {
+      return false;
+    }
 
-  const groupedLeads = filteredLeads.reduce(
-    (acc, lead) => {
-      const key = groupBy === 'status' ? lead.status : lead.assignedAgent.name;
-      if (!acc[key]) {
-        acc[key] = [];
-      }
-      acc[key].push(lead);
-      return acc;
-    },
-    {} as Record<string, Lead[]>
-  );
+    // Date filter
+    const now = new Date();
+    let isInDateRange = true;
+    switch (dateFilter) {
+      case 'today':
+        isInDateRange = isWithinInterval(lead.createdAt, {
+          start: startOfDay(now),
+          end: now,
+        });
+        break;
+      case 'last7days':
+        isInDateRange = isWithinInterval(lead.createdAt, {
+          start: subDays(now, 7),
+          end: now,
+        });
+        break;
+      case 'lastyear':
+        isInDateRange = isWithinInterval(lead.createdAt, {
+          start: subYears(now, 1),
+          end: now,
+        });
+        break;
+      case 'custom':
+        if (customDateRange?.from && customDateRange?.to) {
+          isInDateRange = isWithinInterval(lead.createdAt, {
+            start: startOfDay(customDateRange.from),
+            end: customDateRange.to,
+          });
+        }
+        break;
+      case 'all':
+      default:
+        isInDateRange = true;
+        break;
+    }
+    
+    return isInDateRange;
+  });
+
+  const groupedLeads: Record<string, Lead[]> = {};
+  filteredLeads.forEach(lead => {
+    const key = groupBy === 'status' ? lead.status : lead.assignedAgent.name;
+    if (!groupedLeads[key]) {
+      groupedLeads[key] = [];
+    }
+    groupedLeads[key].push(lead);
+  });
 
   const sortedGroupKeys =
     groupBy === 'status'

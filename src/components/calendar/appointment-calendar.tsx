@@ -115,11 +115,7 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
                 const eventCount = eventsByDate[dateKey];
                 return (
                   <>
-                    <div className={cn(
-                        "absolute top-2 left-2",
-                        props.selected && "text-accent-foreground",
-                        props.today && "text-primary-foreground"
-                    )}>{getDate(date)}</div>
+                    <div>{getDate(date)}</div>
                     {eventCount > 0 && (
                       <div className="absolute bottom-2 left-2 flex items-center gap-1">
                         <span className="w-2 h-2 bg-red-500 rounded-full"></span>

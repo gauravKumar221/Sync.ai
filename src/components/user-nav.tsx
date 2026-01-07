@@ -81,6 +81,12 @@ export function UserNav() {
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+            <DropdownMenuItem asChild className="justify-center">
+                <Link href="/dashboard/notifications" className='cursor-pointer text-primary hover:underline'>
+                    View All Notifications
+                </Link>
+            </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 

@@ -14,6 +14,7 @@ import {
   Wallet,
   Settings,
   MoreHorizontal,
+  Bell,
 } from 'lucide-react';
 
 import {
@@ -49,6 +50,7 @@ const navItems: NavItem[] = [
   { title: 'Analytics', href: '/dashboard/analytics', icon: BarChart },
   { title: 'Calendar', href: '/dashboard/calendar', icon: Calendar },
   { title: 'Finance', href: '/dashboard/finance', icon: Wallet },
+  { title: 'Notifications', href: '/dashboard/notifications', icon: Bell },
 ];
 
 const settingsNav: NavItem = {

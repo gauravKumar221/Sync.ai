@@ -120,7 +120,7 @@ export function ChatLayout({
               key={lead.id}
               onClick={() => setSelectedLeadId(lead.id)}
               className={cn(
-                'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-[hsl(var(--hover-blue))] hover:text-white group',
+                'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-green-600 hover:text-white group',
                 selectedLeadId === lead.id && 'bg-muted'
               )}
             >

@@ -17,7 +17,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 300;
+      const isScrolled = window.scrollY > 30;
       if (isScrolled !== scrolled) {
         setScrolled(isScrolled);
       }

@@ -9,15 +9,15 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <Sidebar variant="inset">
-        <SidebarNav />
-      </Sidebar>
-      <SidebarInset>
-        <div className="flex min-h-screen flex-col">
+      <div className="flex min-h-screen">
+        <Sidebar>
+          <SidebarNav />
+        </Sidebar>
+        <div className="flex-1 flex flex-col">
           <TopBar />
           <main className="flex-1 p-4 md:p-8">{children}</main>
         </div>
-      </SidebarInset>
+      </div>
     </SidebarProvider>
   );
 }

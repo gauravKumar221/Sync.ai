@@ -25,8 +25,8 @@ const ResizablePanel = Panel
 
 const ResizableHandle = React.forwardRef<
   ImperativePanelHandle,
-  React.ComponentProps<typeof PanelResizeHandle>
->(({ className, ...props }, ref) => (
+  React.ComponentProps<typeof PanelResizeHandle> & { withHandle?: boolean }
+>(({ className, withHandle, ...props }, ref) => (
   <PanelResizeHandle
     ref={ref}
     className={cn(
@@ -35,9 +35,11 @@ const ResizableHandle = React.forwardRef<
     )}
     {...props}
   >
-    <div className="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border">
-      <Grip className="h-2.5 w-2.5" />
-    </div>
+    {withHandle && (
+      <div className="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border">
+        <Grip className="h-2.5 w-2.5" />
+      </div>
+    )}
   </PanelResizeHandle>
 ))
 ResizableHandle.displayName = "ResizableHandle"

@@ -11,7 +11,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { Button } from '../ui/button';
-import { CornerDownLeft, Mic, Paperclip, Send } from 'lucide-react';
+import {
+  CornerDownLeft,
+  Facebook,
+  Globe,
+  MessageSquare,
+  Mic,
+  Paperclip,
+  Send,
+  User,
+} from 'lucide-react';
 import { Textarea } from '../ui/textarea';
 import type { Lead, Conversation, LeadSource } from '@/lib/types';
 import { cn } from '@/lib/utils';
@@ -34,6 +43,21 @@ interface ChatLayoutProps {
 }
 
 const leadSources: (LeadSource | 'All')[] = ['All', 'WhatsApp', 'Website', 'Facebook', 'Manual'];
+
+const SourceIcon = ({ source }: { source: LeadSource }) => {
+  switch (source) {
+    case 'WhatsApp':
+      return <MessageSquare className="h-4 w-4 text-green-500" />;
+    case 'Website':
+      return <Globe className="h-4 w-4 text-blue-500" />;
+    case 'Facebook':
+      return <Facebook className="h-4 w-4 text-blue-700" />;
+    case 'Manual':
+      return <User className="h-4 w-4 text-gray-500" />;
+    default:
+      return null;
+  }
+};
 
 
 export function ChatLayout({
@@ -115,7 +139,7 @@ export function ChatLayout({
       >
         <div className={cn('flex h-auto items-center justify-center', isCollapsed ? 'h-[56px]' : 'p-2')}>
           <Tabs defaultValue={sourceFilter} onValueChange={(value) => setSourceFilter(value as LeadSource | 'All')} className="w-full">
-            <TabsList className="grid w-full h-auto grid-cols-3">
+            <TabsList className="grid w-full h-auto grid-cols-5">
                {leadSources.map(source => (
                  <TabsTrigger key={source} value={source}>{source}</TabsTrigger>
                ))}
@@ -142,7 +166,10 @@ export function ChatLayout({
                   <div className="font-semibold">{lead.name}</div>
                   <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.phone}</div>
                 </div>
-                <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.timestamp}</div>
+                <div className='flex flex-col items-end gap-1'>
+                  <SourceIcon source={lead.source} />
+                  <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.timestamp}</div>
+                </div>
               </div>
               <div className="line-clamp-2 text-xs text-muted-foreground group-hover:text-gray-300">
                 {lead.lastMessage.substring(0, 300)}

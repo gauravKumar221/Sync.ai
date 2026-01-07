@@ -1,5 +1,8 @@
 
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,6 +11,13 @@ import Logo from '@/components/logo';
 import { DotsBackground } from '@/components/ui/dots-background';
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  const handleLogin = () => {
+    // In a real app, you'd handle authentication here
+    router.push('/dashboard/overview');
+  };
+
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-background">
       <DotsBackground />
@@ -37,7 +47,7 @@ export default function LoginPage() {
               </div>
               <Input id="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={handleLogin}>
               Login
             </Button>
             <Button variant="outline" className="w-full">

@@ -1,5 +1,8 @@
 
+'use client';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,6 +11,13 @@ import Logo from '@/components/logo';
 import { DotsBackground } from '@/components/ui/dots-background';
 
 export default function RegisterPage() {
+  const router = useRouter();
+
+  const handleCreateAccount = () => {
+    // In a real app, you'd handle form submission here
+    router.push('/login');
+  };
+
   return (
     <div className="relative flex min-h-screen flex-col items-center justify-center bg-background">
       <DotsBackground />
@@ -36,7 +46,7 @@ export default function RegisterPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" />
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" onClick={handleCreateAccount}>
               Create an account
             </Button>
             <Button variant="outline" className="w-full">

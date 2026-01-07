@@ -120,7 +120,7 @@ export function ChatLayout({
               key={lead.id}
               onClick={() => setSelectedLeadId(lead.id)}
               className={cn(
-                'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent',
+                'flex w-full flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-[hsl(var(--hover-blue))] hover:text-white group',
                 selectedLeadId === lead.id && 'bg-muted'
               )}
             >
@@ -131,11 +131,11 @@ export function ChatLayout({
                 </Avatar>
                 <div className="flex-1">
                   <div className="font-semibold">{lead.name}</div>
-                  <div className="text-xs text-muted-foreground">{lead.phone}</div>
+                  <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.phone}</div>
                 </div>
-                <div className="text-xs text-muted-foreground">{lead.timestamp}</div>
+                <div className="text-xs text-muted-foreground group-hover:text-gray-300">{lead.timestamp}</div>
               </div>
-              <div className="line-clamp-2 text-xs text-muted-foreground">
+              <div className="line-clamp-2 text-xs text-muted-foreground group-hover:text-gray-300">
                 {lead.lastMessage.substring(0, 300)}
               </div>
             </button>

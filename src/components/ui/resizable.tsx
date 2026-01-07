@@ -1,6 +1,6 @@
 "use client"
 
-import { Grip, PanelLeft, PanelRight } from "lucide-react"
+import { Grip } from "lucide-react"
 import * as React from "react"
 import { ImperativePanelHandle, Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels"
 

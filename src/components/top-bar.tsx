@@ -1,10 +1,11 @@
-import { SidebarTrigger } from './ui/sidebar';
+'use client';
+
 import { Search } from 'lucide-react';
+import { useSidebar } from './ui/sidebar';
 import { Input } from './ui/input';
 import { UserNav } from './user-nav';
 import { Button } from './ui/button';
 import { PanelLeft } from 'lucide-react';
-import { useSidebar } from './ui/sidebar';
 
 
 export function TopBar() {

@@ -87,7 +87,7 @@ export function SidebarNav() {
               isCollapsed && !isMobile ? 'opacity-0' : 'opacity-100'
             )}
           >
-            Sync.ai
+            LeadFlowAI
           </span>
         </div>
       </SidebarHeader>

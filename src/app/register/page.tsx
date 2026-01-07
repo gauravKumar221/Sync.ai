@@ -29,7 +29,7 @@ export default function RegisterPage() {
        <div className="absolute top-4 left-4 z-10">
          <Link href="/" className="flex items-center gap-2">
             <Logo className="h-6 w-6" />
-            <span className="text-lg font-semibold">Sync.ai</span>
+            <span className="text-lg font-semibold">LeadFlowAI</span>
         </Link>
       </div>
       <Card className="mx-auto max-w-sm z-10">

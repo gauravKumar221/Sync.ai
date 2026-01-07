@@ -11,11 +11,11 @@ import Plasma from '@/components/ui/plasma';
 export default function LandingPage() {
   return (
     <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full">
         <div className="container mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4 md:px-6">
           <Link href="/" className="mr-6 flex items-center space-x-2">
             <Logo className="h-6 w-6" />
-            <span className="font-bold">Sync.ai</span>
+            <span className="font-bold">LeadFlowAI</span>
           </Link>
           <div className="flex items-center space-x-2 md:space-x-4">
             <Button asChild variant="ghost">

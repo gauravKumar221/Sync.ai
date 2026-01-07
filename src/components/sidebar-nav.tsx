@@ -74,17 +74,17 @@ export function SidebarNav() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <Link href={item.href} passHref legacyBehavior>
-                <SidebarMenuButton
-                  as="a"
-                  size="lg"
-                  isActive={isActive(item.href)}
-                  tooltip={item.title}
-                >
+              <SidebarMenuButton
+                asChild
+                size="lg"
+                isActive={isActive(item.href)}
+                tooltip={item.title}
+              >
+                <Link href={item.href}>
                   <item.icon />
                   <span>{item.title}</span>
-                </SidebarMenuButton>
-              </Link>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
@@ -92,17 +92,17 @@ export function SidebarNav() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href={settingsNav.href} passHref legacyBehavior>
-              <SidebarMenuButton
-                as="a"
-                size="lg"
-                isActive={isActive(settingsNav.href)}
-                tooltip={settingsNav.title}
-              >
+            <SidebarMenuButton
+              asChild
+              size="lg"
+              isActive={isActive(settingsNav.href)}
+              tooltip={settingsNav.title}
+            >
+              <Link href={settingsNav.href}>
                 <settingsNav.icon />
                 <span>{settingsNav.title}</span>
-              </SidebarMenuButton>
-            </Link>
+              </Link>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarSeparator />

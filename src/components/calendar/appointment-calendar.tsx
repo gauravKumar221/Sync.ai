@@ -98,19 +98,21 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
                 cell: cn(
                   "relative h-full text-left p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors focus-within:relative focus-within:z-20"
                 ),
-                day: "absolute top-2 left-2 text-sm font-medium",
+                day: "absolute top-2 left-2 text-sm font-medium text-foreground",
                 day_today: "bg-primary text-primary-foreground",
                 day_selected: "bg-accent text-accent-foreground border-2 border-primary",
                 day_outside: "text-muted-foreground/30",
                 day_disabled: "text-muted-foreground/30",
             }}
             components={{
-              DayContent: ({ date, ...props }) => {
+              DayContent: ({ date }) => {
                 const dateKey = format(date, 'yyyy-MM-dd');
                 const eventCount = eventsByDate[dateKey];
+                const day = getDate(date);
+                
                 return (
                   <>
-                    <div>{getDate(date)}</div>
+                    <span className="text-foreground">{day}</span>
                     {eventCount > 0 && (
                       <div className="absolute bottom-2 left-2 flex items-center gap-1">
                         <span className="w-2 h-2 bg-red-500 rounded-full"></span>

@@ -68,10 +68,9 @@ export function DotsBackground({ className }: { className?: string }) {
       }
     }
 
-    const primaryColor = getComputedStyle(document.documentElement).getPropertyValue('--primary');
-    const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent');
+    const primaryColorHsl = getComputedStyle(document.documentElement).getPropertyValue('--primary');
     
-    const color = `hsl(${primaryColor})`;
+    const color = `hsl(${primaryColorHsl})`;
     
     const dots: Dot[] = [];
     const spacing = 40;

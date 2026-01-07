@@ -21,7 +21,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarSeparator,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import Logo from '@/components/logo';
 import type { NavItem } from '@/lib/types';
@@ -58,31 +58,37 @@ const userProfileImage = PlaceHolderImages.find(p => p.id === 'user-profile');
 
 export function SidebarNav() {
   const pathname = usePathname();
+  const { state } = useSidebar();
+  const isCollapsed = state === 'collapsed';
 
   const isActive = (href: string) => {
     return pathname === href;
   };
-  
-  const activeNavItemStyle = "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 bg-gradient-to-r from-cyan-glow/20 to-cyan-glow/5 text-cyan-glow";
-  const navItemStyle = "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-glow/20 hover:to-cyan-glow/5 hover:text-cyan-glow text-muted-foreground";
 
   return (
     <>
       <SidebarHeader>
         <div className="flex items-center gap-2">
           <Logo className="h-7 w-7" />
-          <span className="text-lg font-semibold">LeadFlowAI</span>
+          <span
+            className={cn(
+              'text-lg font-semibold transition-opacity duration-200',
+              isCollapsed ? 'opacity-0' : 'opacity-100'
+            )}
+          >
+            LeadFlowAI
+          </span>
         </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <Link href={item.href}>
-                <div className={cn(isActive(item.href) ? activeNavItemStyle : navItemStyle)}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </div>
+              <Link href={item.href} legacyBehavior passHref>
+                <SidebarMenuButton as="a" isActive={isActive(item.href)} size="lg" tooltip={item.title}>
+                  <item.icon className="h-5 w-5" />
+                  <span className={cn('transition-opacity', isCollapsed ? 'opacity-0' : 'opacity-100')}>{item.title}</span>
+                </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
           ))}
@@ -91,29 +97,28 @@ export function SidebarNav() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <Link href={settingsNav.href}>
-              <div className={cn(isActive(settingsNav.href) ? activeNavItemStyle : navItemStyle)}>
-                <settingsNav.icon />
-                <span>{settingsNav.title}</span>
-              </div>
+            <Link href={settingsNav.href} legacyBehavior passHref>
+              <SidebarMenuButton as="a" isActive={isActive(settingsNav.href)} size="lg" tooltip={settingsNav.title}>
+                <settingsNav.icon className="h-5 w-5" />
+                 <span className={cn('transition-opacity', isCollapsed ? 'opacity-0' : 'opacity-100')}>{settingsNav.title}</span>
+              </SidebarMenuButton>
             </Link>
           </SidebarMenuItem>
         </SidebarMenu>
-        <SidebarSeparator />
         <div className="flex items-center justify-between p-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 overflow-hidden">
             <Avatar className="h-8 w-8">
               <AvatarImage src={userProfileImage?.imageUrl} alt="User" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
-            <div className="flex flex-col text-sm">
+            <div className={cn("flex flex-col text-sm transition-opacity duration-200", isCollapsed ? 'opacity-0' : 'opacity-100' )}>
               <span className="font-medium">User</span>
               <span className="text-xs text-muted-foreground">user@email.com</span>
             </div>
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-7 w-7">
+              <Button variant="ghost" size="icon" className={cn("h-7 w-7", isCollapsed ? 'opacity-0 pointer-events-none' : '')}>
                 <MoreHorizontal />
               </Button>
             </DropdownMenuTrigger>

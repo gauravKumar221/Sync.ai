@@ -4,10 +4,10 @@ import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { add, format, getDate } from 'date-fns';
+import { format, getDate } from 'date-fns';
 
 import { Calendar } from '@/components/ui/calendar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,13 +17,6 @@ import {
   FormLabel,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import type { Appointment, Agent } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
 import { Clock, Plus } from 'lucide-react';
@@ -32,11 +25,10 @@ import { cn } from '@/lib/utils';
 const quickScheduleSchema = z.object({
   clientName: z.string().min(2, 'Name is too short'),
   dateTime: z.string().refine((val) => !isNaN(Date.parse(val)), {
-    message: "Invalid date and time",
+    message: 'Invalid date and time',
   }),
   duration: z.string().min(1, 'Please select a duration'),
 });
-
 
 export function AppointmentCalendar({ initialAppointments, agents }: { initialAppointments: Appointment[], agents: Agent[] }) {
   const { toast } = useToast();
@@ -57,7 +49,7 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
       date: newAppointmentDate,
       purpose: `Meeting with ${values.clientName}`,
       assignedAgent: agents[0], // Defaulting to first agent for simplicity
-      leadId: 'lead-new'
+      leadId: 'lead-new',
     };
     
     setAppointments([...appointments, newAppointment]);
@@ -92,22 +84,25 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
                 root: "h-full flex flex-col",
                 caption: "flex justify-between items-center px-2 pt-2 pb-4",
                 caption_label: "text-xl font-bold",
-                nav_button: "h-8 w-8",
+                nav: 'flex items-center gap-1',
+                nav_button: cn(
+                  'h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100'
+                ),
                 months: "flex-grow",
                 month: "h-full flex flex-col",
-                table: "h-full",
+                table: "h-full w-full border-collapse",
                 head_row: "grid grid-cols-7 mb-2",
-                head_cell: "text-muted-foreground uppercase text-xs",
+                head_cell: "text-muted-foreground uppercase text-xs font-normal",
                 body: "flex-grow grid grid-cols-7 grid-rows-5 gap-2",
                 row: "contents",
                 cell: cn(
-                  "relative h-full text-left p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors"
+                  "relative h-full text-left p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors focus-within:relative focus-within:z-20"
                 ),
+                day: "absolute top-2 left-2 text-sm font-medium",
                 day_today: "bg-primary text-primary-foreground",
-                day_selected: "bg-accent text-accent-foreground",
+                day_selected: "bg-accent text-accent-foreground border-2 border-primary",
                 day_outside: "text-muted-foreground/30",
                 day_disabled: "text-muted-foreground/30",
-                day: "absolute top-2 left-2 text-sm",
             }}
             components={{
               DayContent: ({ date, ...props }) => {

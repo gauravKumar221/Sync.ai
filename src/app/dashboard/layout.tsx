@@ -13,9 +13,9 @@ export default function DashboardLayout({
         <Sidebar>
           <SidebarNav />
         </Sidebar>
-        <div className="flex flex-1 flex-col overflow-y-auto">
+        <div className="flex flex-1 flex-col overflow-hidden">
           <TopBar />
-          <main className="flex-1 p-4 md:p-8">{children}</main>
+          <main className="flex-1 overflow-y-auto p-4 md:p-8">{children}</main>
         </div>
       </div>
     </SidebarProvider>

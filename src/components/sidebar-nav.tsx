@@ -36,6 +36,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { Button } from './ui/button';
+import { cn } from '@/lib/utils';
 
 const navItems: NavItem[] = [
   { title: 'Overview', href: '/dashboard/overview', icon: LayoutDashboard },
@@ -61,6 +62,9 @@ export function SidebarNav() {
   const isActive = (href: string) => {
     return pathname === href;
   };
+  
+  const activeNavItemStyle = "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 bg-gradient-to-r from-cyan-glow/20 to-cyan-glow/5 text-cyan-glow";
+  const navItemStyle = "group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 hover:bg-gradient-to-r hover:from-cyan-glow/20 hover:to-cyan-glow/5 hover:text-cyan-glow text-muted-foreground";
 
   return (
     <>
@@ -74,17 +78,12 @@ export function SidebarNav() {
         <SidebarMenu>
           {navItems.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton
-                asChild
-                size="lg"
-                isActive={isActive(item.href)}
-                tooltip={item.title}
-              >
-                <Link href={item.href}>
+              <Link href={item.href}>
+                <div className={cn(isActive(item.href) ? activeNavItemStyle : navItemStyle)}>
                   <item.icon />
                   <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
+                </div>
+              </Link>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
@@ -92,17 +91,12 @@ export function SidebarNav() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              size="lg"
-              isActive={isActive(settingsNav.href)}
-              tooltip={settingsNav.title}
-            >
-              <Link href={settingsNav.href}>
+            <Link href={settingsNav.href}>
+              <div className={cn(isActive(settingsNav.href) ? activeNavItemStyle : navItemStyle)}>
                 <settingsNav.icon />
                 <span>{settingsNav.title}</span>
-              </Link>
-            </SidebarMenuButton>
+              </div>
+            </Link>
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarSeparator />

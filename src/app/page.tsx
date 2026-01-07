@@ -111,6 +111,7 @@ export default function LandingPage() {
                   transition={{ type: "spring", damping: 30, stiffness: 400 }}
                   rotationInterval={2000}
                 />
+                generate leads after this
               </div>
               <p className="mt-4 text-muted-foreground">
                 Our universal lead capture form can be embedded anywhere. Instantly sync leads from your website, social media, or any other source directly into your CRM.

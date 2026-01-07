@@ -44,11 +44,11 @@ const getStatusBadgeVariant = (status: LeadStatus) => {
 const getPriorityCardVariant = (priority: LeadPriority) => {
   switch (priority) {
     case 'High':
-      return 'bg-blue-700/10 border-blue-700/20 hover:bg-blue-700/20';
+      return 'bg-blue-700/10 border-blue-700/20';
     case 'Medium':
-      return 'bg-yellow-500/10 border-yellow-500/20 hover:bg-yellow-500/20';
+      return 'bg-yellow-500/10 border-yellow-500/20';
     case 'Low':
-      return 'bg-orange-500/10 border-orange-500/20 hover:bg-orange-500/20';
+      return 'bg-orange-500/10 border-orange-500/20';
     default:
       return 'hover:bg-muted/50';
   }

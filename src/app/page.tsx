@@ -56,7 +56,7 @@ export default function LandingPage() {
         <section className="relative w-full h-screen flex items-center justify-center">
           <div className="absolute inset-0 -z-10 h-full w-full">
             <Plasma
-              color="hsl(var(--primary))"
+              color="#ffffff"
               speed={0.6}
               direction="forward"
               scale={1.1}

@@ -41,6 +41,20 @@ const getStatusBadgeVariant = (status: LeadStatus) => {
   }
 };
 
+const getPriorityCardVariant = (priority: LeadPriority) => {
+  switch (priority) {
+    case 'High':
+      return 'bg-blue-700/10 border-blue-700/20 hover:bg-blue-700/20';
+    case 'Medium':
+      return 'bg-yellow-500/10 border-yellow-500/20 hover:bg-yellow-500/20';
+    case 'Low':
+      return 'bg-orange-500/10 border-orange-500/20 hover:bg-orange-500/20';
+    default:
+      return 'hover:bg-muted/50';
+  }
+};
+
+
 const getStatusInitial = (status: LeadStatus) => {
   switch (status) {
     case 'New':
@@ -75,7 +89,7 @@ export function LeadCard({ lead, onDelete, onUpdate }: { lead: Lead, onDelete: (
     <TooltipProvider delayDuration={100}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="group flex cursor-pointer items-center gap-4 border-b p-3 pr-4 transition-colors last:border-b-0 hover:bg-muted/50">
+          <div className={cn("group flex cursor-pointer items-center gap-4 border-b p-3 pr-4 transition-colors last:border-b-0", getPriorityCardVariant(lead.priority))}>
             <div className="flex items-center gap-3">
               <GripVertical className="h-4 w-4 text-muted-foreground/50 transition-opacity group-hover:opacity-100 md:opacity-0" />
               <Checkbox />

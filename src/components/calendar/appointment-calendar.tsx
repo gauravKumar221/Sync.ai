@@ -4,7 +4,7 @@ import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
-import { add, format } from 'date-fns';
+import { add, format, getDate } from 'date-fns';
 
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,7 +15,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import {
@@ -25,44 +24,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
 import type { Appointment, Agent } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { Clock } from 'lucide-react';
+import { Clock, Plus } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const appointmentFormSchema = z.object({
+const quickScheduleSchema = z.object({
   clientName: z.string().min(2, 'Name is too short'),
-  purpose: z.string().min(5, 'Please describe the purpose'),
-  assignedAgent: z.string().min(1, 'Please select an agent'),
-  time: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, 'Invalid time format (HH:MM)'),
+  dateTime: z.string().refine((val) => !isNaN(Date.parse(val)), {
+    message: "Invalid date and time",
+  }),
+  duration: z.string().min(1, 'Please select a duration'),
 });
+
 
 export function AppointmentCalendar({ initialAppointments, agents }: { initialAppointments: Appointment[], agents: Agent[] }) {
   const { toast } = useToast();
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   const [appointments, setAppointments] = React.useState(initialAppointments);
 
-  const form = useForm<z.infer<typeof appointmentFormSchema>>({
-    resolver: zodResolver(appointmentFormSchema),
-    defaultValues: { clientName: '', purpose: '', assignedAgent: '', time: '10:00' },
+  const form = useForm<z.infer<typeof quickScheduleSchema>>({
+    resolver: zodResolver(quickScheduleSchema),
+    defaultValues: { clientName: '', dateTime: '', duration: '30' },
   });
 
-  function onSubmit(values: z.infer<typeof appointmentFormSchema>) {
-    if (!date) {
-      toast({ title: 'Error', description: 'Please select a date.', variant: 'destructive' });
-      return;
-    }
-    const [hours, minutes] = values.time.split(':').map(Number);
-    const newAppointmentDate = new Date(date);
-    newAppointmentDate.setHours(hours, minutes);
+  function onSubmit(values: z.infer<typeof quickScheduleSchema>) {
+    const newAppointmentDate = new Date(values.dateTime);
 
     const newAppointment: Appointment = {
       id: `appt-${Date.now()}`,
       clientName: values.clientName,
       date: newAppointmentDate,
-      purpose: values.purpose,
-      assignedAgent: agents.find(a => a.id === values.assignedAgent)!,
+      purpose: `Meeting with ${values.clientName}`,
+      assignedAgent: agents[0], // Defaulting to first agent for simplicity
       leadId: 'lead-new'
     };
     
@@ -70,95 +64,121 @@ export function AppointmentCalendar({ initialAppointments, agents }: { initialAp
     toast({ title: 'Appointment Scheduled!', description: `Appointment with ${values.clientName} has been created.` });
     form.reset();
   }
-
+  
   const upcomingAppointments = appointments
     .filter(a => a.date >= new Date())
     .sort((a,b) => a.date.getTime() - b.date.getTime())
-    .slice(0, 5);
+    .slice(0, 3);
+    
+  const eventsByDate = appointments.reduce((acc, appt) => {
+    const dateKey = format(appt.date, 'yyyy-MM-dd');
+    if(!acc[dateKey]) {
+        acc[dateKey] = 0;
+    }
+    acc[dateKey]++;
+    return acc;
+  }, {} as Record<string, number>);
 
   return (
-    <div className="grid gap-8 md:grid-cols-3">
-      <div className="md:col-span-2 grid gap-8">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+      <Card className="lg:col-span-2 h-full flex flex-col">
+        <CardContent className="p-2 md:p-4 flex-grow">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="h-full w-full"
+            classNames={{
+                root: "h-full flex flex-col",
+                months: "flex-grow",
+                month: "h-full flex flex-col",
+                table: "h-full",
+                head_row: "grid grid-cols-7",
+                body: "flex-grow grid grid-cols-7 grid-rows-5 gap-2",
+                row: "contents",
+                cell: cn(
+                  "relative h-full text-left p-2 rounded-lg bg-muted/30 hover:bg-muted/60 transition-colors"
+                ),
+                day: "absolute top-2 left-2",
+                day_today: "bg-primary text-primary-foreground rounded-full w-8 h-8 flex items-center justify-center",
+                day_selected: "bg-accent text-accent-foreground rounded-full w-8 h-8 flex items-center justify-center",
+                day_outside: "text-muted-foreground/50",
+            }}
+            components={{
+              DayContent: ({ date, ...props }) => {
+                const dateKey = format(date, 'yyyy-MM-dd');
+                const eventCount = eventsByDate[dateKey];
+                return (
+                  <>
+                    <div>{getDate(date)}</div>
+                    {eventCount > 0 && (
+                      <div className="absolute bottom-2 left-2 flex items-center gap-1">
+                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                         {eventCount > 1 && <span className="text-xs text-muted-foreground">{eventCount} events</span>}
+                      </div>
+                    )}
+                  </>
+                );
+              },
+            }}
+          />
+        </CardContent>
+      </Card>
+
+      <div className="space-y-6">
         <Card>
-            <CardHeader>
-                <CardTitle>Schedule an Appointment</CardTitle>
-                <CardDescription>Select a date and fill in the details to create a new appointment.</CardDescription>
-            </CardHeader>
-          <CardContent className="grid gap-8 lg:grid-cols-2">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={setDate}
-              className="rounded-md border p-4"
-              disabled={(date) => date < new Date(new Date().toDateString())}
-            />
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-lg">Upcoming</CardTitle>
+            <Button size="icon" variant="ghost" className="h-8 w-8 bg-gradient-to-br from-red-500 to-blue-500 text-white">
+                <Plus className="h-4 w-4" />
+            </Button>
+          </CardHeader>
+          <CardContent className="space-y-3">
+             {upcomingAppointments.length > 0 ? (
+                upcomingAppointments.map(appt => (
+                    <div key={appt.id} className="flex flex-col gap-1 rounded-lg border p-3 bg-muted/30">
+                        <p className="font-semibold">{appt.purpose}</p>
+                        <p className="text-sm text-muted-foreground flex items-center gap-2">
+                            <Clock className="h-4 w-4" />
+                            {format(appt.date, "p")}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{appt.assignedAgent.name}</p>
+                    </div>
+                ))
+            ) : (
+                <p className="text-sm text-muted-foreground text-center py-4">No upcoming appointments.</p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-lg">Quick Schedule</CardTitle>
+          </CardHeader>
+          <CardContent>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField control={form.control} name="clientName" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Client Name</FormLabel>
-                    <FormControl><Input placeholder="John Doe" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormLabel className="text-xs">Client Name</FormLabel>
+                    <FormControl><Input placeholder="Name" {...field} /></FormControl>
                   </FormItem>
                 )} />
-                 <FormField control={form.control} name="time" render={({ field }) => (
+                 <FormField control={form.control} name="dateTime" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Time</FormLabel>
-                    <FormControl><Input type="time" {...field} /></FormControl>
-                    <FormMessage />
+                    <FormLabel className="text-xs">Date & Time</FormLabel>
+                    <FormControl><Input type="datetime-local" {...field} /></FormControl>
                   </FormItem>
                 )} />
-                <FormField control={form.control} name="assignedAgent" render={({ field }) => (
+                <FormField control={form.control} name="duration" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Assign to Agent</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl><SelectTrigger><SelectValue placeholder="Select an agent" /></SelectTrigger></FormControl>
-                      <SelectContent>
-                        {agents.map(agent => <SelectItem key={agent.id} value={agent.id}>{agent.name}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
+                    <FormLabel className="text-xs">Duration (min)</FormLabel>
+                     <FormControl><Input type="number" placeholder="30" {...field} /></FormControl>
                   </FormItem>
                 )} />
-                <FormField control={form.control} name="purpose" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Purpose</FormLabel>
-                    <FormControl><Textarea placeholder="Purpose of the appointment" {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-                <Button type="submit" disabled={!date}>Schedule Appointment</Button>
+                <Button type="submit" className="w-full bg-green-600 hover:bg-green-700 text-white">Schedule</Button>
               </form>
             </Form>
-          </CardContent>
-        </Card>
-      </div>
-      <div>
-        <Card>
-          <CardHeader>
-            <CardTitle>Upcoming Appointments</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {upcomingAppointments.length > 0 ? (
-                upcomingAppointments.map(appt => (
-                    <div key={appt.id} className="flex gap-4 rounded-md border p-3">
-                        <Avatar className="h-10 w-10">
-                            <AvatarImage src={appt.assignedAgent.avatarUrl} />
-                            <AvatarFallback>{appt.assignedAgent.name.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <p className="font-semibold">{appt.clientName}</p>
-                            <p className="text-sm text-muted-foreground">{appt.purpose}</p>
-                            <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                                <Clock className="h-3 w-3" />
-                                {format(appt.date, "PPP p")}
-                            </p>
-                        </div>
-                    </div>
-                ))
-            ) : (
-                <p className="text-sm text-muted-foreground text-center py-8">No upcoming appointments.</p>
-            )}
           </CardContent>
         </Card>
       </div>

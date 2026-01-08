@@ -95,7 +95,7 @@ export const InteractiveCalendar = ({ onDateSelect, onGoToToday, events, selecte
               isSameDay(day, selectedDate) 
                 ? 'bg-primary/20 ring-2 ring-primary' 
                 : 'hover:bg-primary/10',
-              isToday && !isSameDay(day, selectedDate) && 'bg-green-900/50',
+               isToday && !isSameDay(day, selectedDate) && 'bg-green-900/50',
             )}
             key={day.toString()}
             onClick={() => onDateSelect(cloneDay)}

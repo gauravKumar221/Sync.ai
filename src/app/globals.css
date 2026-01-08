@@ -98,4 +98,9 @@
     background-clip: text;
     text-fill-color: transparent;
   }
+
+  .glass-card {
+    @apply rounded-xl border border-white/10 bg-white/5 backdrop-blur-lg;
+    box-shadow: inset 0 1px 0 0 hsl(0deg 0% 100% / 5%);
+  }
 }

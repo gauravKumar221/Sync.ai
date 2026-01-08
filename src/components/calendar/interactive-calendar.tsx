@@ -6,9 +6,13 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { AnimatePresence, motion } from 'framer-motion';
 
-export const InteractiveCalendar = () => {
+type Event = {
+    id: string;
+    date: Date;
+}
+
+export const InteractiveCalendar = ({ onDateSelect, events, selectedDate }: { onDateSelect: (date: Date) => void, events: Event[], selectedDate: Date }) => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
   const [direction, setDirection] = useState(0);
 
   const nextMonth = () => {
@@ -76,22 +80,24 @@ export const InteractiveCalendar = () => {
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
         const cloneDay = day;
+        const dayHasEvent = events.some(event => isSameDay(event.date, cloneDay));
+        
         days.push(
           <div
             className={cn(
               'relative h-20 md:h-24 p-2 cursor-pointer transition-colors duration-200 glass-card',
-              !isSameMonth(day, monthStart) && 'text-muted-foreground/50',
-              isSameDay(day, selectedDate) && 'bg-primary/20 ring-2 ring-primary',
+              !isSameMonth(day, monthStart) && 'text-muted-foreground/50 bg-white/5',
+              isSameDay(day, selectedDate) ? 'bg-primary/20 ring-2 ring-primary' : 'hover:bg-primary/10',
               isSameDay(day, new Date()) && !isSameDay(day, selectedDate) && 'bg-blue-500/10'
             )}
             key={day.toString()}
-            onClick={() => setSelectedDate(cloneDay)}
+            onClick={() => onDateSelect(cloneDay)}
           >
             <span className="absolute top-2 left-2 text-sm font-medium">
               {format(day, 'd')}
             </span>
-             {isSameDay(day, new Date()) && (
-              <div className="absolute bottom-2 right-2 h-2 w-2 rounded-full bg-green-500"></div>
+             {dayHasEvent && (
+              <div className="absolute bottom-2 right-2 h-2 w-2 rounded-full bg-orange-400"></div>
             )}
           </div>
         );

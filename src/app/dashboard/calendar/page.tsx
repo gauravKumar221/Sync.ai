@@ -9,58 +9,131 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Calendar as CalendarIcon, Clock, User } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { leads as allLeads, agents } from '@/lib/data';
+import type { Lead, Agent } from '@/lib/types';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { add, subDays } from 'date-fns';
 
 type Event = {
   id: string;
   title: string;
-  client: string;
+  lead: Lead;
+  agent: Agent;
   time: string;
   date: Date;
+  description: string;
 };
 
+const initialEvents: Event[] = [
+  {
+    id: 'evt1',
+    title: 'Follow-up with Mike',
+    lead: allLeads.find((l) => l.name === 'David Wilson')!,
+    agent: agents[1],
+    time: '11:30 AM',
+    date: new Date(),
+    description: 'Pricing and contract negotiation.',
+  },
+  {
+    id: 'evt2',
+    title: 'Demo Call with Sarah',
+    lead: allLeads.find((l) => l.name === 'Sarah Miller')!,
+    agent: agents[0],
+    time: '2:00 PM',
+    date: new Date(),
+    description: 'Initial product demonstration.',
+  },
+  {
+    id: 'evt3',
+    title: 'Project Kick-off',
+    lead: allLeads.find((l) => l.name === 'Peter Jones')!,
+    agent: agents[2],
+    time: '10:00 AM',
+    date: add(new Date(), { days: 2 }),
+    description: 'Kick-off meeting for Project Alpha.',
+  },
+    {
+    id: 'evt4',
+    title: 'Strategy Session',
+    lead: allLeads.find((l) => l.name === 'John Doe')!,
+    agent: agents[0],
+    time: '3:00 PM',
+    date: subDays(new Date(), { days: 1 }),
+    description: 'Finalize Q3 marketing strategy.',
+  },
+];
+
 export default function CalendarPage() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-  const [clientName, setClientName] = useState('');
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [events, setEvents] = useState<Event[]>(initialEvents);
+  const [selectedLeadId, setSelectedLeadId] = useState<string | undefined>();
+  const [time, setTime] = useState('12:00');
   const [duration, setDuration] = useState('30');
+  const [eventTitle, setEventTitle] = useState('');
   const { toast } = useToast();
 
-  const mockEvents: Event[] = [
-    {
-      id: 'evt1',
-      title: 'Follow-up with Mike',
-      client: 'Mike Johnson',
-      time: '11:00 AM',
-      date: new Date(),
-    },
-  ];
+  const handleDateSelect = (date: Date) => {
+    setSelectedDate(date);
+  };
 
   const handleSchedule = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!date || !clientName) {
+    const lead = allLeads.find((l) => l.id === selectedLeadId);
+    if (!selectedDate || !selectedLeadId || !lead || !eventTitle) {
       toast({
         title: 'Missing Information',
-        description: 'Please select a client and a date.',
+        description: 'Please fill out all fields to schedule an event.',
         variant: 'destructive',
       });
       return;
     }
+
+    const newEvent: Event = {
+      id: `evt-${Date.now()}`,
+      title: eventTitle,
+      lead,
+      agent: agents[Math.floor(Math.random() * agents.length)], // Assign randomly for demo
+      time: format(
+        new Date(`1970-01-01T${time}`),
+        'hh:mm a'
+      ),
+      date: selectedDate,
+      description: `Scheduled for ${duration} minutes.`,
+    };
+
+    setEvents([...events, newEvent]);
+
     toast({
       title: 'Appointment Scheduled!',
-      description: `Meeting with ${clientName} on ${format(
-        date,
+      description: `Meeting with ${lead.name} on ${format(
+        selectedDate,
         'PPP'
-      )} for ${duration} minutes.`,
+      )} at ${newEvent.time}.`,
     });
+
     // Reset form
-    setClientName('');
+    setSelectedLeadId(undefined);
+    setEventTitle('');
+    setTime('12:00');
     setDuration('30');
   };
+
+  const eventsForSelectedDay = events.filter((event) =>
+    isSameDay(event.date, selectedDate)
+  );
 
   return (
     <div className="space-y-8">
@@ -72,71 +145,136 @@ export default function CalendarPage() {
       </div>
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <InteractiveCalendar />
+          <InteractiveCalendar
+            onDateSelect={handleDateSelect}
+            events={events}
+            selectedDate={selectedDate}
+          />
         </div>
         <div className="space-y-6">
           <Card className="glass-card">
-            <div className="p-6">
+            <CardContent className="p-6">
               <h3 className="mb-4 text-lg font-semibold">
-                Follow-up with Mike
+                Schedule for {format(selectedDate, 'MMMM do, yyyy')}
               </h3>
-              <div className="space-y-3 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  <span>11:00 AM</span>
+              {eventsForSelectedDay.length > 0 ? (
+                <div className="space-y-4">
+                  {eventsForSelectedDay.map((event) => (
+                    <div
+                      key={event.id}
+                      className="glass-card -m-2 rounded-lg p-4"
+                    >
+                      <div className="flex items-start gap-4">
+                        <Avatar className="h-10 w-10 border-2 border-white/20">
+                          <AvatarImage src={event.lead.avatarUrl} />
+                          <AvatarFallback>
+                            {event.lead.name.charAt(0)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <p className="font-semibold">{event.lead.name}</p>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <Clock className="h-4 w-4" />
+                            <span>
+                              {event.time} with {event.agent.name}
+                            </span>
+                          </div>
+                          <p className="mt-1 text-sm">{event.description}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>Mike Johnson</span>
-                </div>
-              </div>
-            </div>
+              ) : (
+                <p className="text-center text-muted-foreground">
+                  No appointments for this day.
+                </p>
+              )}
+            </CardContent>
           </Card>
 
           <Card className="glass-card">
-            <div className="p-6">
+            <CardContent className="p-6">
               <h3 className="mb-4 text-lg font-semibold">Quick Schedule</h3>
               <form onSubmit={handleSchedule} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="client-name">Client Name</Label>
+                  <Label htmlFor="event-title">Event Title</Label>
                   <Input
-                    id="client-name"
-                    placeholder="Name"
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
+                    id="event-title"
+                    placeholder="e.g. Follow-up call"
+                    value={eventTitle}
+                    onChange={(e) => setEventTitle(e.target.value)}
                     className="bg-transparent"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="date-time">Date & Time</Label>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={'outline'}
-                        className={cn(
-                          'w-full justify-start text-left font-normal bg-transparent hover:bg-white/5',
-                          !date && 'text-muted-foreground'
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? (
-                          format(date, 'PPP')
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 glass-card border-none">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                        className="bg-transparent"
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <Label htmlFor="client-name">Client Name</Label>
+                  <Select
+                    value={selectedLeadId}
+                    onValueChange={setSelectedLeadId}
+                  >
+                    <SelectTrigger
+                      id="client-name"
+                      className="bg-transparent hover:bg-white/5"
+                    >
+                      <SelectValue placeholder="Select a client" />
+                    </SelectTrigger>
+                    <SelectContent className="glass-card border-none">
+                      {allLeads.map((lead) => (
+                        <SelectItem
+                          key={lead.id}
+                          value={lead.id}
+                          className="cursor-pointer"
+                        >
+                          {lead.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="date-time">Date</Label>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={'outline'}
+                          className={cn(
+                            'w-full justify-start text-left font-normal bg-transparent hover:bg-white/5',
+                            !selectedDate && 'text-muted-foreground'
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {selectedDate ? (
+                            format(selectedDate, 'PPP')
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 glass-card border-none">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={(day) => day && setSelectedDate(day)}
+                          initialFocus
+                          className="bg-transparent"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="time">Time</Label>
+                    <Input
+                      id="time"
+                      type="time"
+                      value={time}
+                      onChange={(e) => setTime(e.target.value)}
+                      className="bg-transparent"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="duration">Duration (min)</Label>
                   <Input
@@ -154,7 +292,7 @@ export default function CalendarPage() {
                   Schedule
                 </Button>
               </form>
-            </div>
+            </CardContent>
           </Card>
         </div>
       </div>

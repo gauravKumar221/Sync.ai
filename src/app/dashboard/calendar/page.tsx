@@ -85,22 +85,25 @@ export default function CalendarPage() {
   const [duration, setDuration] = useState('30');
   const [eventTitle, setEventTitle] = useState('');
   const [calendarKey, setCalendarKey] = useState(Date.now());
+  const [formDate, setFormDate] = useState<Date>(new Date());
   const { toast } = useToast();
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
+    setFormDate(date);
   };
   
   const handleGoToToday = () => {
     const today = new Date();
     setSelectedDate(today);
+    setFormDate(today);
     setCalendarKey(Date.now()); 
   };
 
   const handleSchedule = (e: React.FormEvent) => {
     e.preventDefault();
     const lead = allLeads.find((l) => l.id === selectedLeadId);
-    if (!selectedDate || !selectedLeadId || !lead || !eventTitle) {
+    if (!formDate || !selectedLeadId || !lead || !eventTitle) {
       toast({
         title: 'Missing Information',
         description: 'Please fill out all fields to schedule an event.',
@@ -118,7 +121,7 @@ export default function CalendarPage() {
         new Date(`1970-01-01T${time}`),
         'hh:mm a'
       ),
-      date: selectedDate,
+      date: formDate,
       description: `Scheduled for ${duration} minutes.`,
     };
 
@@ -127,7 +130,7 @@ export default function CalendarPage() {
     toast({
       title: 'Appointment Scheduled!',
       description: `Meeting with ${lead.name} on ${format(
-        selectedDate,
+        formDate,
         'PPP'
       )} at ${newEvent.time}.`,
     });
@@ -251,12 +254,12 @@ export default function CalendarPage() {
                           variant={'outline'}
                           className={cn(
                             'w-full justify-start text-left font-normal bg-transparent hover:bg-white/5',
-                            !selectedDate && 'text-muted-foreground'
+                            !formDate && 'text-muted-foreground'
                           )}
                         >
                           <CalendarIcon className="mr-2 h-4 w-4" />
-                          {selectedDate ? (
-                            format(selectedDate, 'PPP')
+                          {formDate ? (
+                            format(formDate, 'PPP')
                           ) : (
                             <span>Pick a date</span>
                           )}
@@ -265,8 +268,8 @@ export default function CalendarPage() {
                       <PopoverContent className="w-auto p-0 glass-card border-none">
                         <Calendar
                           mode="single"
-                          selected={selectedDate}
-                          onSelect={(day) => day && setSelectedDate(day)}
+                          selected={formDate}
+                          onSelect={(day) => day && setFormDate(day)}
                           initialFocus
                           className="bg-transparent"
                         />

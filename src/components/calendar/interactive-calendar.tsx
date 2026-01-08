@@ -85,28 +85,29 @@ export const InteractiveCalendar = ({ onDateSelect, onGoToToday, events, selecte
       for (let i = 0; i < 7; i++) {
         const cloneDay = day;
         const dayHasEvent = events.some(event => isSameDay(event.date, cloneDay));
+        const isToday = isSameDay(day, new Date());
         
         days.push(
           <div
             className={cn(
-              'relative h-20 md:h-24 p-2 cursor-pointer transition-colors duration-200 glass-card',
+              'relative flex h-20 md:h-24 items-center justify-center p-2 cursor-pointer transition-colors duration-200 glass-card',
               !isSameMonth(day, monthStart) && 'text-muted-foreground/50 bg-white/5',
               isSameDay(day, selectedDate) 
                 ? 'bg-primary/20 ring-2 ring-primary' 
                 : 'hover:bg-primary/10',
-              isSameDay(day, new Date()) && !isSameDay(day, selectedDate) && 'bg-blue-500/20',
+              isToday && !isSameDay(day, selectedDate) && 'bg-green-900/50',
             )}
             key={day.toString()}
             onClick={() => onDateSelect(cloneDay)}
           >
             <span className={cn(
-              "absolute top-2 left-2 text-sm font-medium",
-               isSameDay(day, new Date()) && !isSameDay(day, selectedDate) && 'text-blue-300'
+              "text-sm font-medium",
+               isToday && !isSameDay(day, selectedDate) ? 'text-green-300' : isSameDay(day, selectedDate) ? 'text-primary-foreground' : ''
             )}>
               {format(day, 'd')}
             </span>
              {dayHasEvent && (
-              <div className="absolute bottom-2 right-2 h-2 w-2 rounded-full bg-orange-400"></div>
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 h-1.5 w-1.5 rounded-full bg-orange-400"></div>
             )}
           </div>
         );

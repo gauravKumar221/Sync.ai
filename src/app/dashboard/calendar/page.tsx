@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { InteractiveCalendar } from '@/components/calendar/interactive-calendar';
@@ -83,10 +84,17 @@ export default function CalendarPage() {
   const [time, setTime] = useState('12:00');
   const [duration, setDuration] = useState('30');
   const [eventTitle, setEventTitle] = useState('');
+  const [calendarKey, setCalendarKey] = useState(Date.now());
   const { toast } = useToast();
 
   const handleDateSelect = (date: Date) => {
     setSelectedDate(date);
+  };
+  
+  const handleGoToToday = () => {
+    const today = new Date();
+    setSelectedDate(today);
+    setCalendarKey(Date.now()); 
   };
 
   const handleSchedule = (e: React.FormEvent) => {
@@ -146,7 +154,9 @@ export default function CalendarPage() {
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
           <InteractiveCalendar
+            key={calendarKey}
             onDateSelect={handleDateSelect}
+            onGoToToday={handleGoToToday}
             events={events}
             selectedDate={selectedDate}
           />

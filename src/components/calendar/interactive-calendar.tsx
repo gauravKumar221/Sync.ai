@@ -1,3 +1,4 @@
+
 'use client';
 import { useState } from 'react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, addDays, isSameMonth, isSameDay } from 'date-fns';
@@ -11,8 +12,8 @@ type Event = {
     date: Date;
 }
 
-export const InteractiveCalendar = ({ onDateSelect, events, selectedDate }: { onDateSelect: (date: Date) => void, events: Event[], selectedDate: Date }) => {
-  const [currentMonth, setCurrentMonth] = useState(new Date());
+export const InteractiveCalendar = ({ onDateSelect, onGoToToday, events, selectedDate }: { onDateSelect: (date: Date) => void, onGoToToday: () => void, events: Event[], selectedDate: Date }) => {
+  const [currentMonth, setCurrentMonth] = useState(selectedDate);
   const [direction, setDirection] = useState(0);
 
   const nextMonth = () => {
@@ -29,6 +30,9 @@ export const InteractiveCalendar = ({ onDateSelect, events, selectedDate }: { on
     <div className="flex items-center justify-between px-2 py-4">
       <h2 className="text-lg font-semibold">{format(currentMonth, 'MMMM yyyy')}</h2>
       <div className="flex items-center gap-2">
+         <Button variant="outline" size="sm" onClick={onGoToToday} className="h-8 bg-white/5 hover:bg-white/10 border-white/10">
+          Today
+        </Button>
         <Button variant="outline" size="icon" onClick={prevMonth} className="h-8 w-8 bg-white/5 hover:bg-white/10 border-white/10">
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -87,13 +91,18 @@ export const InteractiveCalendar = ({ onDateSelect, events, selectedDate }: { on
             className={cn(
               'relative h-20 md:h-24 p-2 cursor-pointer transition-colors duration-200 glass-card',
               !isSameMonth(day, monthStart) && 'text-muted-foreground/50 bg-white/5',
-              isSameDay(day, selectedDate) ? 'bg-primary/20 ring-2 ring-primary' : 'hover:bg-primary/10',
-              isSameDay(day, new Date()) && !isSameDay(day, selectedDate) && 'bg-blue-500/10'
+              isSameDay(day, selectedDate) 
+                ? 'bg-primary/20 ring-2 ring-primary' 
+                : 'hover:bg-primary/10',
+              isSameDay(day, new Date()) && !isSameDay(day, selectedDate) && 'bg-blue-500/20',
             )}
             key={day.toString()}
             onClick={() => onDateSelect(cloneDay)}
           >
-            <span className="absolute top-2 left-2 text-sm font-medium">
+            <span className={cn(
+              "absolute top-2 left-2 text-sm font-medium",
+               isSameDay(day, new Date()) && !isSameDay(day, selectedDate) && 'text-blue-300'
+            )}>
               {format(day, 'd')}
             </span>
              {dayHasEvent && (

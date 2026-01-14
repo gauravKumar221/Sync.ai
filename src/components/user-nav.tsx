@@ -1,10 +1,8 @@
+"use client";
 
-'use client';
-
-import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
-import { Button } from './ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 import {
-  
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -12,41 +10,59 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from './ui/dropdown-menu';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { Bell, CreditCard, LogOut, Settings, User, MessageSquare, Globe, Facebook } from 'lucide-react';
-import { leads } from '@/lib/data';
-import { LeadSource } from '@/lib/types';
-import { cn } from '@/lib/utils';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+} from "./ui/dropdown-menu";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+import {
+  Bell,
+  CreditCard,
+  LogOut,
+  Settings,
+  User,
+  MessageSquare,
+  Globe,
+  Facebook,
+} from "lucide-react";
+import { leads } from "@/lib/data";
+import { LeadSource } from "@/lib/types";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/context/auth-context";
 
-const userProfileImage = PlaceHolderImages.find(p => p.id === 'user-profile');
+const userProfileImage = PlaceHolderImages.find((p) => p.id === "user-profile");
 
-const SourceIcon = ({ source, className }: { source: LeadSource, className?: string }) => {
+const SourceIcon = ({
+  source,
+  className,
+}: {
+  source: LeadSource;
+  className?: string;
+}) => {
   const iconProps = { className: cn("h-4 w-4", className) };
   switch (source) {
-    case 'WhatsApp':
+    case "WhatsApp":
       return <MessageSquare {...iconProps} />;
-    case 'Website':
+    case "Website":
       return <Globe {...iconProps} />;
-    case 'Facebook':
+    case "Facebook":
       return <Facebook {...iconProps} />;
-    case 'Manual':
+    case "Manual":
       return <User {...iconProps} />;
     default:
       return null;
   }
 };
 
-
 export function UserNav() {
+  const { user, logout } = useAuth();
   const recentLeads = leads.slice(0, 4);
   const router = useRouter();
 
   const handleLogout = () => {
-    router.push('/login');
+    logout();
+    router.push("/login");
   };
+  console.log(user, "admin");
 
   return (
     <div className="flex items-center gap-4">
@@ -64,17 +80,24 @@ export function UserNav() {
         <DropdownMenuContent className="w-80" align="end">
           <DropdownMenuLabel>
             <div className="flex items-center justify-between">
-                <p className="text-sm font-medium leading-none">Notifications</p>
-                <p className="text-xs leading-none text-muted-foreground">4 new</p>
+              <p className="text-sm font-medium leading-none">Notifications</p>
+              <p className="text-xs leading-none text-muted-foreground">
+                4 new
+              </p>
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-           <DropdownMenuGroup>
-            {recentLeads.map(lead => (
+          <DropdownMenuGroup>
+            {recentLeads.map((lead) => (
               <DropdownMenuItem key={lead.id} className="items-start gap-3">
-                <SourceIcon source={lead.source} className="text-muted-foreground mt-1" />
+                <SourceIcon
+                  source={lead.source}
+                  className="text-muted-foreground mt-1"
+                />
                 <div className="flex flex-col">
-                  <p className="text-sm font-medium">New lead from {lead.source}</p>
+                  <p className="text-sm font-medium">
+                    New lead from {lead.source}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {lead.name} - {lead.timestamp}
                   </p>
@@ -83,11 +106,14 @@ export function UserNav() {
             ))}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
-            <DropdownMenuItem asChild className="justify-center">
-                <Link href="/dashboard/notifications" className='cursor-pointer text-primary hover:underline'>
-                    View All Notifications
-                </Link>
-            </DropdownMenuItem>
+          <DropdownMenuItem asChild className="justify-center">
+            <Link
+              href="/dashboard/notifications"
+              className="cursor-pointer text-primary hover:underline"
+            >
+              View All Notifications
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
@@ -103,9 +129,9 @@ export function UserNav() {
         <DropdownMenuContent className="w-56" align="end" forceMount>
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-              <p className="text-sm font-medium leading-none">User</p>
+              <p className="text-sm font-medium leading-none">{user?.name}</p>
               <p className="text-xs leading-none text-muted-foreground">
-                user@example.com
+                {user?.email}
               </p>
             </div>
           </DropdownMenuLabel>

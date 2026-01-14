@@ -17,8 +17,10 @@ import { DotsBackground } from "@/components/ui/dots-background";
 import { useToast } from "@/hooks/use-toast";
 import { API } from "@/lib/api";
 import { useState } from "react";
+import { useAuth } from "@/app/context/auth-context";
 
 export default function LoginPage() {
+  const { setUser } = useAuth();
   const router = useRouter();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -41,6 +43,7 @@ export default function LoginPage() {
         }),
       });
       const data: any = await response.json();
+
       if (response.ok) {
         const expiry = new Date();
         expiry.setDate(expiry.getDate() + 1);
@@ -49,13 +52,27 @@ export default function LoginPage() {
           data.token
         }; expires=${expiry.toUTCString()}; path=/; SameSite=Lax`;
 
+        localStorage.setItem("user", JSON.stringify(data.user));
         localStorage.setItem("Auth", data.token);
+
+        const profileData = await fetch(API.profile, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
+          },
+        });
+        const profileDataJson = await profileData.json();
+        setUser(profileDataJson.user);
+        localStorage.setItem("user", JSON.stringify(profileDataJson.user));
 
         toast({
           title: "Login Successful",
           description: "Welcome back!",
         });
 
+        // ⬇️ This is the key change
+        // window.location.href = "/dashboard/overview";
         router.push("/dashboard/overview");
       }
 

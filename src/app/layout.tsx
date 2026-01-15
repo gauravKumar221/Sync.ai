@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { Providers } from "./providers";
+import { LeadProvider } from "./context/LeadContext";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -35,7 +36,9 @@ export default function RootLayout({
         className={cn("font-body antialiased", inter.variable)}
         suppressHydrationWarning={true}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <LeadProvider>{children}</LeadProvider>
+        </Providers>
         <Toaster />
       </body>
     </html>

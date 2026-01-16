@@ -10,6 +10,9 @@ type User = {
   location: string;
   city: string;
   address: string;
+  firstName?: any;
+  lastName?: any;
+  role?: any;
 };
 
 type AuthContextType = {

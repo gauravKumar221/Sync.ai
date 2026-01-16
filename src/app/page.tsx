@@ -1,20 +1,36 @@
+"use client";
 
-'use client';
+import Link from "next/link";
+import {
+  ArrowRight,
+  LayoutDashboard,
+  LogOut,
+  MessageSquare,
+  Settings,
+  Zap,
+} from "lucide-react";
+import { useState, useEffect } from "react";
 
-import Link from 'next/link';
-import { ArrowRight, MessageSquare, Zap } from 'lucide-react';
-import { useState, useEffect } from 'react';
-
-import { Button } from '@/components/ui/button';
-import { LeadForm } from '@/components/lead-form';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import Logo from '@/components/logo';
-import { cn } from '@/lib/utils';
-import RotatingText from '@/components/ui/RotatingText';
-import { motion } from 'framer-motion';
-
+import { Button } from "@/components/ui/button";
+import { LeadForm } from "@/components/lead-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Logo from "@/components/logo";
+import { cn } from "@/lib/utils";
+import RotatingText from "@/components/ui/RotatingText";
+import { motion } from "framer-motion";
+import { useAuth } from "./context/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,9 +40,9 @@ export default function LandingPage() {
       }
     };
 
-    document.addEventListener('scroll', handleScroll);
+    document.addEventListener("scroll", handleScroll);
     return () => {
-      document.removeEventListener('scroll', handleScroll);
+      document.removeEventListener("scroll", handleScroll);
     };
   }, [scrolled]);
 
@@ -34,8 +50,10 @@ export default function LandingPage() {
     <div className="flex min-h-screen w-full flex-col">
       <header
         className={cn(
-          'sticky top-0 z-50 w-full transition-colors duration-300',
-          scrolled ? 'bg-background/80 backdrop-blur-sm border-b' : 'bg-transparent'
+          "sticky top-0 z-50 w-full transition-colors duration-300",
+          scrolled
+            ? "bg-background/80 backdrop-blur-sm border-b"
+            : "bg-transparent"
         )}
       >
         <div className="container mx-auto flex h-14 max-w-screen-xl items-center justify-between px-4 md:px-6">
@@ -43,13 +61,71 @@ export default function LandingPage() {
             <Logo className="h-6 w-6" />
             <span className="font-bold">sync.ai</span>
           </Link>
+
           <div className="flex items-center space-x-2 md:space-x-4">
-            <Button asChild variant="ghost">
-              <Link href="/login">Login</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/register">Sign Up</Link>
-            </Button>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="relative h-9 w-9 rounded-full"
+                  >
+                    <Avatar className="h-9 w-9">
+                      {/* <AvatarImage
+                        src={user.avatar || "/placeholder-user.jpg"}
+                        alt={user.name}
+                      /> */}
+                      <AvatarFallback>
+                        {user.name?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">
+                        {user.name}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/overview">
+                      <LayoutDashboard className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/dashboard/settings">
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Settings</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await logout();
+                    }}
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <>
+                <Button asChild variant="ghost">
+                  <Link href="/login">Login</Link>
+                </Button>
+                <Button asChild>
+                  <Link href="/register">Sign Up</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
@@ -62,16 +138,29 @@ export default function LandingPage() {
                 into <span className="text-gradient">Customers</span>
               </h1>
               <p className="max-w-2xl text-lg text-muted-foreground">
-                Capture leads from any platform, engage them with AI-powered auto-replies, and manage your entire sales pipeline in one powerful dashboard.
+                Capture leads from any platform, engage them with AI-powered
+                auto-replies, and manage your entire sales pipeline in one
+                powerful dashboard.
               </p>
             </div>
             <div className="mx-auto flex w-full max-w-sm flex-col gap-4 sm:flex-row">
               <Button asChild size="lg" className="w-full sm:w-auto">
-                <Link href="/dashboard/overview">
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                {user ? (
+                  <Link href="/dashboard/overview">
+                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                ) : (
+                  <Link href="/register">
+                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                )}
               </Button>
-              <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="w-full sm:w-auto"
+              >
                 <Link href="#capture">Capture Leads</Link>
               </Button>
             </div>
@@ -90,7 +179,7 @@ export default function LandingPage() {
               <div className="text-3xl font-bold flex items-center gap-2">
                 <span>Never miss a lead from</span>
                 <RotatingText
-                  texts={['WhatsApp', 'Website', 'Facebook', 'Manual']}
+                  texts={["WhatsApp", "Website", "Facebook", "Manual"]}
                   mainClassName="px-3 bg-primary text-primary-foreground overflow-hidden py-1 justify-center rounded-lg"
                   staggerFrom={"last"}
                   initial={{ y: "100%" }}
@@ -103,7 +192,9 @@ export default function LandingPage() {
                 />
               </div>
               <p className="mt-4 text-muted-foreground">
-                Our universal lead capture form can be embedded anywhere. Instantly sync leads from your website, social media, or any other source directly into your CRM.
+                Our universal lead capture form can be embedded anywhere.
+                Instantly sync leads from your website, social media, or any
+                other source directly into your CRM.
               </p>
               <div className="mt-8 flex flex-col gap-4">
                 <motion.div
@@ -118,7 +209,10 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold">Instant Capture</h3>
-                    <p className="text-sm text-muted-foreground">Leads are saved and displayed on your dashboard in real-time.</p>
+                    <p className="text-sm text-muted-foreground">
+                      Leads are saved and displayed on your dashboard in
+                      real-time.
+                    </p>
                   </div>
                 </motion.div>
                 <motion.div
@@ -133,7 +227,10 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <h3 className="font-semibold">Automated First Touch</h3>
-                    <p className="text-sm text-muted-foreground">Trigger intelligent auto-replies to engage leads from the first moment.</p>
+                    <p className="text-sm text-muted-foreground">
+                      Trigger intelligent auto-replies to engage leads from the
+                      first moment.
+                    </p>
                   </div>
                 </motion.div>
               </div>
